@@ -213,12 +213,12 @@ public class GameController : MonoBehaviour
 
         if(whoseTurn == 0)
         {
-            //winSound.Play();
+            winSound.Play();
             resultText.text = "X wins !";
         }
         else
         {
-            //loseSound.Play();
+            loseSound.Play();
             resultText.text = "O wins !";
         }
 
