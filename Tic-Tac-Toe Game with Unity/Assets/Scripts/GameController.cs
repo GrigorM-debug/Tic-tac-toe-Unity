@@ -30,6 +30,10 @@ public class GameController : MonoBehaviour
         {
             tictactoeSpaces[i].interactable = true;
             tictactoeSpaces[i].GetComponent<Image>().sprite = null;
+        }
+
+        for (int i = 0; i < markedFields.Length; i++) 
+        {
             markedFields[i] = -1;
         }
     }
