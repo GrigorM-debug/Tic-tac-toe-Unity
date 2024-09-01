@@ -14,8 +14,8 @@ public class GameController : MonoBehaviour
     public Button[] tictactoeSpaces; //playable space for out game
     public int[] markedFields;
     public TextMeshProUGUI resultText;
-
-
+    public AudioSource winSound;
+    public AudioSource loseSound;
 
     // Start is called before the first frame update
     void Start()
@@ -210,9 +210,21 @@ public class GameController : MonoBehaviour
         {
             btn.interactable = false;
         }
-        string result = (whoseTurn == 0) ? "X wins!" : "O wins!";
 
-        resultText.text = result;
+        if(whoseTurn == 0)
+        {
+            //winSound.Play();
+            resultText.text = "X wins !";
+        }
+        else
+        {
+            //loseSound.Play();
+            resultText.text = "O wins !";
+        }
+
+        //string result = (whoseTurn == 0) ? "X wins!" : "O wins!";
+
+        //resultText.text = result;
         resultText.gameObject.SetActive(true);
         
         //Debug.Log(result);
