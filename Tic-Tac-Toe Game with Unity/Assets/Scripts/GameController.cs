@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+
 
 public class GameController : MonoBehaviour
 {
@@ -11,6 +13,9 @@ public class GameController : MonoBehaviour
     public Sprite[] playerIcons;
     public Button[] tictactoeSpaces; //playable space for out game
     public int[] markedFields;
+    public TextMeshProUGUI resultText;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -25,8 +30,9 @@ public class GameController : MonoBehaviour
         turnIcons[0].SetActive(true);
         turnIcons[1].SetActive(false);
         markedFields = new int[9];
+        resultText.gameObject.SetActive(false);
 
-        for(int i = 0; i < tictactoeSpaces.Length; i++)
+        for (int i = 0; i < tictactoeSpaces.Length; i++)
         {
             tictactoeSpaces[i].interactable = true;
             tictactoeSpaces[i].GetComponent<Image>().sprite = null;
@@ -150,15 +156,15 @@ public class GameController : MonoBehaviour
     int CheckWinner()
     {
         int[,] winningCombinations = new int[,] {
-        { 0, 1, 2 },
-        { 3, 4, 5 },
-        { 6, 7, 8 },
-        { 0, 3, 6 },
-        { 1, 4, 7 },
-        { 2, 5, 8 },
-        { 0, 4, 8 },
-        { 2, 4, 6 }
-    };
+            { 0, 1, 2 },
+            { 3, 4, 5 },
+            { 6, 7, 8 },
+            { 0, 3, 6 },
+            { 1, 4, 7 },
+            { 2, 5, 8 },
+            { 0, 4, 8 },
+            { 2, 4, 6 }
+        };
 
         for (int i = 0; i < winningCombinations.GetLength(0); i++)
         {
@@ -205,12 +211,18 @@ public class GameController : MonoBehaviour
             btn.interactable = false;
         }
         string result = (whoseTurn == 0) ? "X wins!" : "O wins!";
-        Debug.Log(result);
+
+        resultText.text = result;
+        resultText.gameObject.SetActive(true);
+        
+        //Debug.Log(result);
     }
 
 
     void DrawGame()
     {
-        Debug.Log("It's a draw!");
+        //Debug.Log("It's a draw!");
+        resultText.text = "It's a draw!";
+        resultText.gameObject.SetActive(true);
     }
 }
