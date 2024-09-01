@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI resultText;
     public AudioSource winSound;
     public AudioSource loseSound;
+    public AudioSource moveSound;
 
     // Start is called before the first frame update
     void Start()
@@ -59,6 +60,8 @@ public class GameController : MonoBehaviour
 
         turnCount++;
         markedFields[whichButton] = whoseTurn;
+
+        moveSound.Play();
 
         if(CheckWin())
         {
