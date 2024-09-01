@@ -37,4 +37,25 @@ public class GameController : MonoBehaviour
     {
         
     }
+
+    //Paramater variable is showing which button in the grid is clicked
+    public void TicTacToePlayableButtons(int whichButton)
+    {
+        tictactoeSpaces[whichButton].image.sprite = playerIcons[whoseTurn]; // displaying the icon of the player who clicked the button (X for X player, O for O player
+
+        tictactoeSpaces[whichButton].interactable = false; //Making sure that the button can't be clicked more than once. After clicking you can't interact with it.
+
+        if (whoseTurn == 0)
+        {
+            whoseTurn = 1;
+            turnIcons[0].SetActive(false);
+            turnIcons[1].SetActive(true);
+        }
+        else
+        {
+            whoseTurn = 0;
+            turnIcons[0].SetActive(true);
+            turnIcons[1].SetActive(false);
+        }
+    }
 }
