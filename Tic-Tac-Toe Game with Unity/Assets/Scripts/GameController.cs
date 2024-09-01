@@ -78,8 +78,20 @@ public class GameController : MonoBehaviour
             if (markedFields[i] = -1)
             {
                 markedFields[i] = 1;
+                int score = MiniMax(markedFields, 0, false);
+                markedFields[i] = -1;
 
+                if(score > bestScore)
+                {
+                    bestScore = score;
+                    move = i;
+                }
             }
+        }
+
+        if (move != -1)
+        {
+            TicTacToePlayableButtons(move);
         }
     }
 
@@ -117,7 +129,7 @@ public class GameController : MonoBehaviour
                 if (markedFields[i] == -1)
                 {
                     markedFields[i] = 0; // Player's move
-                    int score = Minimax(markedFields, depth + 1, true);
+                    int score = MiniMax(markedFields, depth + 1, true);
                     markedFields[i] = -1;
                     bestScore = Mathf.Min(score, bestScore);
                 }
@@ -158,5 +170,19 @@ public class GameController : MonoBehaviour
     bool CheckWin()
     {
         return Mathf.Abs(CheckWinner()) == 10;
+    }
+
+    void EndGame()
+    {
+        foreach (Button btn in tictactoeSpaces)
+        {
+            btn.interactable = false;
+        }
+        Debug.Log((whoseTurn == 0 ? "X" : "O") + " wins!");
+    }
+
+    void DrawGame()
+    {
+        Debug.Log("It's a draw!");
     }
 }
