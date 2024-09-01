@@ -22,6 +22,12 @@ public class GameController : MonoBehaviour
     void Start()
     {
         GameInitialize();
+
+        //moveSound.Play();
+
+        moveSound = GetComponents<AudioSource>()[2];
+        winSound = GetComponents<AudioSource>()[0];
+        loseSound = GetComponents<AudioSource>()[1];
     }
 
     void GameInitialize()
