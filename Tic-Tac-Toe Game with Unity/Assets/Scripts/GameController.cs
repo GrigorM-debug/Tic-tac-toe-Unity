@@ -54,17 +54,24 @@ public class GameController : MonoBehaviour
         turnCount++;
         markedFields[whichButton] = whoseTurn;
 
-        if (whoseTurn == 0)
+        if(CheckWin())
         {
-            whoseTurn = 1;
-            turnIcons[0].SetActive(false);
-            turnIcons[1].SetActive(true);
+            EndGame();
+        }
+        else if (turnCount >= 9) 
+        {
+            DrawGame();
         }
         else
         {
-            whoseTurn = 0;
-            turnIcons[0].SetActive(true);
-            turnIcons[1].SetActive(false);
+            whoseTurn = (whoseTurn == 0) ? 1 : 0;
+            turnIcons[0].SetActive(whoseTurn == 0);
+            turnIcons[1].SetActive(whoseTurn == 1);
+
+            if (whoseTurn == 1) // Assuming the computer is O
+            {
+                ComputerMove();
+            }
         }
     }
 
