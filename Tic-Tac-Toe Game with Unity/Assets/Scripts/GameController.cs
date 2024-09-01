@@ -67,4 +67,96 @@ public class GameController : MonoBehaviour
             turnIcons[1].SetActive(false);
         }
     }
+
+    void ComputerMove()
+    {
+        int bestScore = int.MinValue;
+        int move = -1;
+
+        for (int i = 0; i < markedFields.Length; i++)
+        {
+            if (markedFields[i] = -1)
+            {
+                markedFields[i] = 1;
+
+            }
+        }
+    }
+
+    int MiniMax(int[] markedFields, int depth, bool isMaximizing)
+    {
+        int result = CheckWinner();
+        if(result != 0)
+        {
+            return result;
+        }
+
+        if (isMaximizing)
+        {
+            int bestScore = int.MinValue;
+
+            for (int i = 0; i < markedFields.Length; i++)
+            {
+                if (markedFields[i] == -1)
+                {
+                    markedFields[i] = 1;
+                    int score = MiniMax(markedFields, depth + 1, false);
+                    markedFields[i] = -1;
+                    bestScore = Mathf.Max(score, bestScore);
+                }
+            }
+
+            return bestScore;
+        }
+        else 
+        {
+            int bestScore = int.MaxValue;
+
+            for (int i = 0; i < markedFields.Length; i++) 
+            {
+                if (markedFields[i] == -1)
+                {
+                    markedFields[i] = 0; // Player's move
+                    int score = Minimax(markedFields, depth + 1, true);
+                    markedFields[i] = -1;
+                    bestScore = Mathf.Min(score, bestScore);
+                }
+            }
+
+            return bestScore;
+        }
+    }
+
+    int CheckWinner()
+    {
+        int[,] winningCombinations = new int[,] {
+            { 0, 1, 2 },
+            { 3, 4, 5 },
+            { 6, 7, 8 },
+            { 0, 3, 6 },
+            { 1, 4, 7 },
+            { 2, 5, 8 },
+            { 0, 4, 8 },
+            { 2, 4, 6 }
+        };
+
+        for (int i = 0; i < winningCombinations.GetLength(0); i++)
+        {
+            int a = winningCombinations[i, 0];
+            int b = winningCombinations[i, 1];
+            int c = winningCombinations[i, 2];
+
+            if (markedFields[a] == markedFields[b] && markedFields[b] == markedFields[c] && markedFields[a] != 0)
+            {
+                return markedFields[a] == 1 ? -10 : 10;
+            }
+        }
+
+        return 0; // No winner
+    }
+
+    bool CheckWin()
+    {
+        return Mathf.Abs(CheckWinner()) == 10;
+    }
 }
