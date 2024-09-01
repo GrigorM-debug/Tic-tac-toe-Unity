@@ -82,7 +82,7 @@ public class GameController : MonoBehaviour
 
         for (int i = 0; i < markedFields.Length; i++)
         {
-            if (markedFields[i] = -1)
+            if (markedFields[i] == -1)
             {
                 markedFields[i] = 1;
                 int score = MiniMax(markedFields, 0, false);
@@ -105,7 +105,7 @@ public class GameController : MonoBehaviour
     int MiniMax(int[] markedFields, int depth, bool isMaximizing)
     {
         int result = CheckWinner();
-        if(result != 0)
+        if (result != 0)
         {
             return result;
         }
@@ -118,7 +118,7 @@ public class GameController : MonoBehaviour
             {
                 if (markedFields[i] == -1)
                 {
-                    markedFields[i] = 1;
+                    markedFields[i] = 1; // AI move
                     int score = MiniMax(markedFields, depth + 1, false);
                     markedFields[i] = -1;
                     bestScore = Mathf.Max(score, bestScore);
@@ -127,11 +127,11 @@ public class GameController : MonoBehaviour
 
             return bestScore;
         }
-        else 
+        else
         {
             int bestScore = int.MaxValue;
 
-            for (int i = 0; i < markedFields.Length; i++) 
+            for (int i = 0; i < markedFields.Length; i++)
             {
                 if (markedFields[i] == -1)
                 {
@@ -146,18 +146,19 @@ public class GameController : MonoBehaviour
         }
     }
 
+
     int CheckWinner()
     {
         int[,] winningCombinations = new int[,] {
-            { 0, 1, 2 },
-            { 3, 4, 5 },
-            { 6, 7, 8 },
-            { 0, 3, 6 },
-            { 1, 4, 7 },
-            { 2, 5, 8 },
-            { 0, 4, 8 },
-            { 2, 4, 6 }
-        };
+        { 0, 1, 2 },
+        { 3, 4, 5 },
+        { 6, 7, 8 },
+        { 0, 3, 6 },
+        { 1, 4, 7 },
+        { 2, 5, 8 },
+        { 0, 4, 8 },
+        { 2, 4, 6 }
+    };
 
         for (int i = 0; i < winningCombinations.GetLength(0); i++)
         {
@@ -165,18 +166,36 @@ public class GameController : MonoBehaviour
             int b = winningCombinations[i, 1];
             int c = winningCombinations[i, 2];
 
-            if (markedFields[a] == markedFields[b] && markedFields[b] == markedFields[c] && markedFields[a] != 0)
+            if (markedFields[a] == markedFields[b] && markedFields[b] == markedFields[c] && markedFields[a] != -1)
             {
-                return markedFields[a] == 1 ? -10 : 10;
+                if (markedFields[a] == 0) // Player wins
+                {
+                    return -10;
+                }
+                else if (markedFields[a] == 1) // AI wins
+                {
+                    return 10;
+                }
             }
         }
 
-        return 0; // No winner
+        // Check for a draw
+        for (int i = 0; i < markedFields.Length; i++)
+        {
+            if (markedFields[i] == -1)
+            {
+                return 0; // Game not over
+            }
+        }
+
+        return 0; // Draw
     }
+
 
     bool CheckWin()
     {
-        return Mathf.Abs(CheckWinner()) == 10;
+        int winner = CheckWinner();
+        return winner == 10 || winner == -10;
     }
 
     void EndGame()
@@ -185,8 +204,10 @@ public class GameController : MonoBehaviour
         {
             btn.interactable = false;
         }
-        Debug.Log((whoseTurn == 0 ? "X" : "O") + " wins!");
+        string result = (whoseTurn == 0) ? "X wins!" : "O wins!";
+        Debug.Log(result);
     }
+
 
     void DrawGame()
     {
