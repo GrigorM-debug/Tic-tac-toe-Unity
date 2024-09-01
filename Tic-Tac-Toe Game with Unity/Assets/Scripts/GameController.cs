@@ -86,6 +86,7 @@ public class GameController : MonoBehaviour
             if (whoseTurn == 1) // Assuming the computer is O
             {
                 ComputerMove();
+                moveSound.Play();
             }
         }
     }
