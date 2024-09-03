@@ -30,6 +30,11 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI OWinsCounter;
     public TextMeshProUGUI TiesCounter;
 
+    public int currXWinCount = 0;
+    public int currOWinsCounter = 0;
+    public int tiesCount = 0;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,9 +64,9 @@ public class GameController : MonoBehaviour
         //OWinsCounter.text = "0";
         //TiesCounter.text = "0";
 
-        XWinsCount.text = "0";
-        OWinsCounter.text = "0";
-        TiesCounter.text = "0";
+        XWinsCount.text = currXWinCount.ToString();
+        OWinsCounter.text = currOWinsCounter.ToString();
+        TiesCounter.text = tiesCount.ToString();
 
         for (int i = 0; i < tictactoeSpaces.Length; i++)
         {
@@ -103,6 +108,9 @@ public class GameController : MonoBehaviour
         resultText.gameObject.SetActive(true);
 
         rematchButton.gameObject.SetActive(true );
+
+        tiesCount++;
+        TiesCounter.text = tiesCount.ToString();
     }
 
     //Paramater variable is showing which button in the grid is clicked
@@ -276,7 +284,7 @@ public class GameController : MonoBehaviour
             winSound.Play();
             resultText.text = "X wins!";
 
-            int currXWinCount = int.Parse(XWinsCount.text);
+            currXWinCount = int.Parse(XWinsCount.text);
             currXWinCount++;
             XWinsCount.text = currXWinCount.ToString();
         }
@@ -285,7 +293,7 @@ public class GameController : MonoBehaviour
             loseSound.Play();
             resultText.text = "O wins!";
             
-            int currOWinsCounter = int.Parse(OWinsCounter.text);
+            currOWinsCounter = int.Parse(OWinsCounter.text);
             currOWinsCounter++;
             OWinsCounter.text = currOWinsCounter.ToString();
         }
@@ -305,7 +313,7 @@ public class GameController : MonoBehaviour
     void DrawGame()
     {
         //Debug.Log("It's a draw!");
-        int tiesCount = int.Parse(TiesCounter.text);
+        tiesCount = int.Parse(TiesCounter.text);
         tiesCount++;
         TiesCounter.text = tiesCount.ToString();
 
