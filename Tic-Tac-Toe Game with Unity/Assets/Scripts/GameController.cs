@@ -24,6 +24,8 @@ public class GameController : MonoBehaviour
 
     public TextMeshProUGUI timerText;
 
+    public Button rematchButton;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +48,7 @@ public class GameController : MonoBehaviour
         resultText.gameObject.SetActive(false);
         isTimerRunning = true;
         currentPlayerTime = playerTimeLimit;
+        rematchButton.gameObject.SetActive(false);
 
         for (int i = 0; i < tictactoeSpaces.Length; i++)
         {
@@ -264,6 +267,8 @@ public class GameController : MonoBehaviour
             resultText.text = "O wins!";
         }
 
+        currentPlayerTime = playerTimeLimit;
+        rematchButton.gameObject.SetActive(true);
         //string result = (whoseTurn == 0) ? "X wins!" : "O wins!";
 
         //resultText.text = result;
@@ -278,5 +283,19 @@ public class GameController : MonoBehaviour
         //Debug.Log("It's a draw!");
         resultText.text = "It's a draw!";
         resultText.gameObject.SetActive(true);
+    }
+
+    public void Rematch()
+    {
+        if (winSound.isPlaying)
+        {
+            winSound.Stop();
+        }
+        else if (loseSound.isPlaying)
+        {
+            loseSound.Stop();
+        }
+
+        Start();
     }
 }
