@@ -26,6 +26,10 @@ public class GameController : MonoBehaviour
 
     public Button rematchButton;
 
+    public TextMeshProUGUI XWinsCount;
+    public TextMeshProUGUI OWinsCounter;
+    public TextMeshProUGUI TiesCounter;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -2000,6 +2000,9 @@ MonoBehaviour:
   isTimerRunning: 0
   timerText: {fileID: 1174896235}
   rematchButton: {fileID: 656216604}
+  XWinsCount: {fileID: 76176922}
+  OWinsCounter: {fileID: 1476646913}
+  TiesCounter: {fileID: 1461678929}
 --- !u!222 &1276959793
 CanvasRenderer:
   m_ObjectHideFlags: 0
