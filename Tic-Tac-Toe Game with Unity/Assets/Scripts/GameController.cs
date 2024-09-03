@@ -268,6 +268,7 @@ public class GameController : MonoBehaviour
         }
 
         currentPlayerTime = playerTimeLimit;
+        isTimerRunning = false;
         rematchButton.gameObject.SetActive(true);
         //string result = (whoseTurn == 0) ? "X wins!" : "O wins!";
 
