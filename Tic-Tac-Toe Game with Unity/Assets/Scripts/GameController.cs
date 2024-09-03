@@ -14,9 +14,13 @@ public class GameController : MonoBehaviour
     public Button[] tictactoeSpaces; //playable space for out game
     public int[] markedFields;
     public TextMeshProUGUI resultText;
+
     public AudioSource winSound;
     public AudioSource loseSound;
     public AudioSource moveSound;
+    public AudioSource timeIsEndingSound;
+
+    public bool hasPlayedEndingSound = false;
 
     public float playerTimeLimit = 10f; // 10 seconds
     public float currentPlayerTime;
@@ -45,6 +49,7 @@ public class GameController : MonoBehaviour
         moveSound = GetComponents<AudioSource>()[2];
         winSound = GetComponents<AudioSource>()[0];
         loseSound = GetComponents<AudioSource>()[1];
+        timeIsEndingSound = GetComponents<AudioSource>()[4];
     }
 
     void GameInitialize()
@@ -58,7 +63,7 @@ public class GameController : MonoBehaviour
         isTimerRunning = true;
         currentPlayerTime = playerTimeLimit;
         rematchButton.gameObject.SetActive(false);
-
+        hasPlayedEndingSound = false;
         //Game history
         //XWinsCount.text = "0";
         //OWinsCounter.text = "0";
@@ -94,6 +99,11 @@ public class GameController : MonoBehaviour
                 isTimerRunning = false;
                 ComputerWinsWhenTimeIsOver();
             }
+            else if (currentPlayerTime <= 3 && !hasPlayedEndingSound)
+            {
+                timeIsEndingSound.Play();
+                hasPlayedEndingSound = true; // Ensure the sound only plays once when reaching 3 seconds
+            }
         }
     }
 
@@ -116,6 +126,11 @@ public class GameController : MonoBehaviour
     //Paramater variable is showing which button in the grid is clicked
     public void TicTacToePlayableButtons(int whichButton)
     {
+        if (timeIsEndingSound.isPlaying)
+        {
+            timeIsEndingSound.Stop();
+        }
+
         tictactoeSpaces[whichButton].image.sprite = playerIcons[whoseTurn]; // displaying the icon of the player who clicked the button (X for X player, O for O player
 
         tictactoeSpaces[whichButton].interactable = false; //Making sure that the button can't be clicked more than once. After clicking you can't interact with it.
@@ -145,6 +160,9 @@ public class GameController : MonoBehaviour
                 moveSound.Play();
             }
         }
+
+        currentPlayerTime = playerTimeLimit;
+        hasPlayedEndingSound = false;
     }
 
     void ComputerMove()
@@ -332,6 +350,6 @@ public class GameController : MonoBehaviour
             loseSound.Stop();
         }
 
-        Start();
+        GameInitialize();
     }
 }
