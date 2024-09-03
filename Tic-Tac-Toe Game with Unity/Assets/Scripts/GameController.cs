@@ -54,6 +54,15 @@ public class GameController : MonoBehaviour
         currentPlayerTime = playerTimeLimit;
         rematchButton.gameObject.SetActive(false);
 
+        //Game history
+        //XWinsCount.text = "0";
+        //OWinsCounter.text = "0";
+        //TiesCounter.text = "0";
+
+        XWinsCount.text = "0";
+        OWinsCounter.text = "0";
+        TiesCounter.text = "0";
+
         for (int i = 0; i < tictactoeSpaces.Length; i++)
         {
             tictactoeSpaces[i].interactable = true;
@@ -266,11 +275,19 @@ public class GameController : MonoBehaviour
         {
             winSound.Play();
             resultText.text = "X wins!";
+
+            int currXWinCount = int.Parse(XWinsCount.text);
+            currXWinCount++;
+            XWinsCount.text = currXWinCount.ToString();
         }
         else
         {
             loseSound.Play();
             resultText.text = "O wins!";
+            
+            int currOWinsCounter = int.Parse(OWinsCounter.text);
+            currOWinsCounter++;
+            OWinsCounter.text = currOWinsCounter.ToString();
         }
 
         currentPlayerTime = playerTimeLimit;
@@ -288,6 +305,10 @@ public class GameController : MonoBehaviour
     void DrawGame()
     {
         //Debug.Log("It's a draw!");
+        int tiesCount = int.Parse(TiesCounter.text);
+        tiesCount++;
+        TiesCounter.text = tiesCount.ToString();
+
         resultText.text = "It's a draw!";
         resultText.gameObject.SetActive(true);
     }
