@@ -18,6 +18,12 @@ public class GameController : MonoBehaviour
     public AudioSource loseSound;
     public AudioSource moveSound;
 
+    public float playerTimeLimit = 10f; // 10 seconds
+    public float currentPlayerTime;
+    public bool isTimerRunning = false;
+
+    public TextMeshProUGUI timerText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +44,8 @@ public class GameController : MonoBehaviour
         turnIcons[1].SetActive(false);
         markedFields = new int[9];
         resultText.gameObject.SetActive(false);
+        isTimerRunning = true;
+        currentPlayerTime = playerTimeLimit;
 
         for (int i = 0; i < tictactoeSpaces.Length; i++)
         {
@@ -54,7 +62,29 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (isTimerRunning)
+        {
+            currentPlayerTime -= Time.deltaTime;
+
+            timerText.text = Mathf.Ceil(currentPlayerTime).ToString();
+
+            if (currentPlayerTime <= 0)
+            {
+                isTimerRunning = false;
+                ComputerWinsWhenTimeIsOver();
+            }
+        }
+    }
+
+    void ComputerWinsWhenTimeIsOver()
+    {
+        foreach (var t in tictactoeSpaces) { t.interactable = false; }
+
+        loseSound.Play();
+
+        resultText.text = "Time's Up! O wins!";
+
+        resultText.gameObject.SetActive(true);
     }
 
     //Paramater variable is showing which button in the grid is clicked
@@ -116,6 +146,8 @@ public class GameController : MonoBehaviour
         {
             TicTacToePlayableButtons(move);
         }
+
+        currentPlayerTime = playerTimeLimit;
     }
 
     int MiniMax(int[] markedFields, int depth, bool isMaximizing)
