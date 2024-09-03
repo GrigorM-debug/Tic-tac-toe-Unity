@@ -898,7 +898,7 @@ RectTransform:
   m_GameObject: {fileID: 656216602}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.2827744, y: 2.9485621, z: 1}
+  m_LocalScale: {x: 2.847455, y: 3.3065176, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1015415422}
@@ -906,8 +906,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 462, y: 475}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 464.27423, y: 475.21}
+  m_SizeDelta: {x: 163.641, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &656216604
 MonoBehaviour:
@@ -986,7 +986,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Type: 2
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1369,15 +1369,15 @@ RectTransform:
   m_GameObject: {fileID: 1015415421}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.04139, y: 1.2571, z: 1}
+  m_LocalScale: {x: 0.8870803, y: 1.0416205, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 656216603}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7, y: -0.6}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 7.0607, y: 0.0000019073486}
+  m_SizeDelta: {x: 1734.21, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1015415423
 MonoBehaviour:
@@ -1401,9 +1401,9 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
-    m_FontSize: 22
-    m_FontStyle: 0
-    m_BestFit: 0
+    m_FontSize: 18
+    m_FontStyle: 1
+    m_BestFit: 1
     m_MinSize: 0
     m_MaxSize: 300
     m_Alignment: 4
@@ -1411,7 +1411,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
+    m_LineSpacing: 1.5
   m_Text: Rematch
 --- !u!222 &1015415424
 CanvasRenderer:
