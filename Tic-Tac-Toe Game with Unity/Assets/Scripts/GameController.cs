@@ -88,6 +88,8 @@ public class GameController : MonoBehaviour
         resultText.text = "Time's Up! O wins!";
 
         resultText.gameObject.SetActive(true);
+
+        rematchButton.gameObject.SetActive(true );
     }
 
     //Paramater variable is showing which button in the grid is clicked
