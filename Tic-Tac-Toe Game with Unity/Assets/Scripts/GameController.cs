@@ -168,11 +168,13 @@ public class GameController : MonoBehaviour
     void ComputerMove()
     {
         int bestScore = int.MinValue;
-        int move = -1;
+        //int move = -1;
 
         // Alpha and beta should be initialized to int.MinValue and int.MaxValue respectively
         int alpha = int.MinValue;
         int beta = int.MaxValue;
+
+        List<int> bestMoves = new List<int>();
 
         for (int i = 0; i < markedFields.Length; i++)
         {
@@ -182,16 +184,28 @@ public class GameController : MonoBehaviour
                 int score = MiniMax(markedFields, 0, false, alpha, beta);
                 markedFields[i] = -1;
 
-                if(score > bestScore)
+                if (score > bestScore)
                 {
                     bestScore = score;
-                    move = i;
+                    //move = i;
+                    bestMoves.Clear();
+                    bestMoves.Add(i); // score the best move
+                }
+                else if (score == bestScore) 
+                {
+                    bestMoves.Add(i);
                 }
             }
         }
 
-        if (move != -1)
+        //if (move != -1)
+        //{
+        //    TicTacToePlayableButtons(move);
+        //}
+
+        if (bestMoves.Count > 0) 
         {
+            int move = bestMoves[Random.Range(0, bestMoves.Count)];
             TicTacToePlayableButtons(move);
         }
 
