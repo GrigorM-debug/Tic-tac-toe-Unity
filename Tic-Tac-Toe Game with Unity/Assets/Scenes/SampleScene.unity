@@ -1996,7 +1996,8 @@ MonoBehaviour:
   winSound: {fileID: 1276959794}
   loseSound: {fileID: 1276959795}
   moveSound: {fileID: 1276959794}
-  timeIsEndingSound: {fileID: 0}
+  timeIsEndingSound: {fileID: 1276959794}
+  hasPlayedEndingSound: 0
   playerTimeLimit: 10
   currentPlayerTime: 0
   isTimerRunning: 0
@@ -2411,7 +2412,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: b009794e436304b4283330cabc43f8d9, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

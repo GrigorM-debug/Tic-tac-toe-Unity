@@ -170,12 +170,16 @@ public class GameController : MonoBehaviour
         int bestScore = int.MinValue;
         int move = -1;
 
+        // Alpha and beta should be initialized to int.MinValue and int.MaxValue respectively
+        int alpha = int.MinValue;
+        int beta = int.MaxValue;
+
         for (int i = 0; i < markedFields.Length; i++)
         {
             if (markedFields[i] == -1)
             {
                 markedFields[i] = 1;
-                int score = MiniMax(markedFields, 0, false);
+                int score = MiniMax(markedFields, 0, false, alpha, beta);
                 markedFields[i] = -1;
 
                 if(score > bestScore)
@@ -194,7 +198,8 @@ public class GameController : MonoBehaviour
         currentPlayerTime = playerTimeLimit;
     }
 
-    int MiniMax(int[] markedFields, int depth, bool isMaximizing)
+    //Added Alpha–beta pruning optimisation
+    int MiniMax(int[] markedFields, int depth, bool isMaximizing, int alpha, int beta)
     {
         int result = CheckWinner();
         if (result != 0)
@@ -202,6 +207,7 @@ public class GameController : MonoBehaviour
             return result;
         }
 
+        //Checking if Computer is on turn
         if (isMaximizing)
         {
             int bestScore = int.MinValue;
@@ -211,9 +217,17 @@ public class GameController : MonoBehaviour
                 if (markedFields[i] == -1)
                 {
                     markedFields[i] = 1; // AI move
-                    int score = MiniMax(markedFields, depth + 1, false);
+
+                    //Calling the function but this time is Player move - isMaximazing = false
+                    int score = MiniMax(markedFields, depth + 1, false, alpha, beta);
                     markedFields[i] = -1;
                     bestScore = Mathf.Max(score, bestScore);
+                    alpha = Mathf.Max(alpha, bestScore);
+
+                    if(alpha >= beta)
+                    {
+                        break;
+                    }
                 }
             }
 
@@ -228,7 +242,9 @@ public class GameController : MonoBehaviour
                 if (markedFields[i] == -1)
                 {
                     markedFields[i] = 0; // Player's move
-                    int score = MiniMax(markedFields, depth + 1, true);
+
+                    //Calling the function but this time is Computer move - is Maximizing = true
+                    int score = MiniMax(markedFields, depth + 1, true, alpha, beta);
                     markedFields[i] = -1;
                     bestScore = Mathf.Min(score, bestScore);
                 }
