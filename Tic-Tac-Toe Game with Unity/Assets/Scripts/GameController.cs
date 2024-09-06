@@ -295,6 +295,35 @@ public class GameController : MonoBehaviour
     {
         int score = 0;
 
+        int ai = 1;
+        int player = 0;
+
+        for (int i = 0; i < markedFields.Length; i++)
+        {
+            if (markedFields[i] == -1)
+            {
+                markedFields[i] = ai;
+                if(CheckWinner() == ai)
+                {
+                    score += 100;
+                    markedFields[i] = -1;
+                }
+            }
+        }
+
+        for(int i = 0; i < markedFields.Length; i++)
+        {
+            if(markedFields[i] == -1)
+            {
+                markedFields[i] = player;
+                if(CheckWinner() == player)
+                {
+                    score -= 100;
+                    markedFields[i] = -1;
+                }
+            }
+        }
+
         // Example evaluation logic
         if (markedFields[4] == 1) score += 3; // Center
         if (markedFields[0] == 1 || markedFields[2] == 1 || markedFields[6] == 1 || markedFields[8] == 1) score += 2; // Corners
