@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 
 public class GameController : MonoBehaviour
@@ -37,6 +38,8 @@ public class GameController : MonoBehaviour
     public int currXWinCount = 0;
     public int currOWinsCounter = 0;
     public int tiesCount = 0;
+
+    Dictionary<int, int> moveFrequency = new Dictionary<int, int>();
 
 
     // Start is called before the first frame update
@@ -234,12 +237,13 @@ public class GameController : MonoBehaviour
                     markedFields[i] = 1; // AI move
 
                     //Calling the function but this time is Player move - isMaximazing = false
-                    int score = MiniMax(markedFields, depth + 1, false, alpha, beta);
+                    int score = AdjustedEvaluateBoard(markedFields);
+                    int miniMaxScore = MiniMax(markedFields, depth + 1, false, alpha, beta);
                     markedFields[i] = -1;
                     bestScore = Mathf.Max(score, bestScore);
                     alpha = Mathf.Max(alpha, bestScore);
 
-                    if(alpha >= beta)
+                    if (alpha >= beta)
                     {
                         break;
                     }
@@ -259,7 +263,8 @@ public class GameController : MonoBehaviour
                     markedFields[i] = 0; // Player's move
 
                     //Calling the function but this time is Computer move - is Maximizing = true
-                    int score = MiniMax(markedFields, depth + 1, true, alpha, beta);
+                    int score = AdjustedEvaluateBoard(markedFields);
+                    int miniMaxScore = MiniMax(markedFields, depth + 1, true, alpha, beta);
                     markedFields[i] = -1;
                     bestScore = Mathf.Min(score, bestScore);
                 }
@@ -267,6 +272,42 @@ public class GameController : MonoBehaviour
 
             return bestScore;
         }
+    }
+
+    void RecordPlaterMove(int move)
+    {
+        if (moveFrequency.ContainsKey(move))
+        {
+            moveFrequency[move]++;
+        }
+        else 
+        {
+            moveFrequency[move] = 1;
+        }
+    }
+
+    int GetMostFrequentMove()
+    {
+        return moveFrequency.OrderByDescending(kvp => kvp.Value).FirstOrDefault().Key;
+    }
+
+    int AdjustedEvaluateBoard(int[] markedFields)
+    {
+        int score = 0;
+
+        // Example evaluation logic
+        if (markedFields[4] == 1) score += 3; // Center
+        if (markedFields[0] == 1 || markedFields[2] == 1 || markedFields[6] == 1 || markedFields[8] == 1) score += 2; // Corners
+        if (markedFields[1] == 1 || markedFields[3] == 1 || markedFields[5] == 1 || markedFields[7] == 1) score += 1; // Sides
+
+        // Example of adjusting score based on player's frequent moves
+        int mostFrequentMove = GetMostFrequentMove();
+        if (markedFields[mostFrequentMove] == -1) // Assuming -1 means the space is available
+        {
+            score -= 2; // Adjust score based on player's strategy
+        }
+
+        return score;
     }
 
     int CheckWinner()
