@@ -218,7 +218,8 @@ public class GameController : MonoBehaviour
         int result = CheckWinner();
         if (result != 0)
         {
-            return result;
+            //return result;
+            return result == 1 ? 10 : result == -1 ? -10 : 0;
         }
 
         //Checking if Computer is on turn
@@ -267,7 +268,6 @@ public class GameController : MonoBehaviour
             return bestScore;
         }
     }
-
 
     int CheckWinner()
     {
