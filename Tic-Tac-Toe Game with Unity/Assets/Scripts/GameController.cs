@@ -5,30 +5,26 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 
-
 public class GameController : MonoBehaviour
 {
-    public int whoseTurn; // 0 = x and 1 = o
+    public int whoseTurn; // 0 = X and 1 = O
     public int turnCount;
     public GameObject[] turnIcons;
     public Sprite[] playerIcons;
-    public Button[] tictactoeSpaces; //playable space for out game
-    public int[] markedFields;
-    public TextMeshProUGUI resultText;
+    public Button[] tictactoeSpaces; // Playable space for our game
+    public int[,] markedFields; // 2D array for marked fields
 
+    public TextMeshProUGUI resultText;
     public AudioSource winSound;
     public AudioSource loseSound;
     public AudioSource moveSound;
     public AudioSource timeIsEndingSound;
 
     public bool hasPlayedEndingSound = false;
-
     public float playerTimeLimit = 10f; // 10 seconds
     public float currentPlayerTime;
     public bool isTimerRunning = false;
-
     public TextMeshProUGUI timerText;
-
     public Button rematchButton;
 
     public TextMeshProUGUI XWinsCount;
@@ -39,15 +35,11 @@ public class GameController : MonoBehaviour
     public int currOWinsCounter = 0;
     public int tiesCount = 0;
 
-    Dictionary<int, int> moveFrequency = new Dictionary<int, int>();
+    Dictionary<Vector2Int, int> moveFrequency = new Dictionary<Vector2Int, int>();
 
-
-    // Start is called before the first frame update
     void Start()
     {
         GameInitialize();
-
-        //moveSound.Play();
 
         moveSound = GetComponents<AudioSource>()[2];
         winSound = GetComponents<AudioSource>()[0];
@@ -61,16 +53,12 @@ public class GameController : MonoBehaviour
         turnCount = 0;
         turnIcons[0].SetActive(true);
         turnIcons[1].SetActive(false);
-        markedFields = new int[9];
+        markedFields = new int[3, 3];
         resultText.gameObject.SetActive(false);
         isTimerRunning = true;
         currentPlayerTime = playerTimeLimit;
         rematchButton.gameObject.SetActive(false);
         hasPlayedEndingSound = false;
-        //Game history
-        //XWinsCount.text = "0";
-        //OWinsCounter.text = "0";
-        //TiesCounter.text = "0";
 
         XWinsCount.text = currXWinCount.ToString();
         OWinsCounter.text = currOWinsCounter.ToString();
@@ -82,19 +70,20 @@ public class GameController : MonoBehaviour
             tictactoeSpaces[i].GetComponent<Image>().sprite = null;
         }
 
-        for (int i = 0; i < markedFields.Length; i++) 
+        for (int i = 0; i < 3; i++)
         {
-            markedFields[i] = -1;
+            for (int j = 0; j < 3; j++)
+            {
+                markedFields[i, j] = -1;
+            }
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isTimerRunning)
         {
             currentPlayerTime -= Time.deltaTime;
-
             timerText.text = Mathf.Ceil(currentPlayerTime).ToString();
 
             if (currentPlayerTime <= 0)
@@ -113,43 +102,36 @@ public class GameController : MonoBehaviour
     void ComputerWinsWhenTimeIsOver()
     {
         foreach (var t in tictactoeSpaces) { t.interactable = false; }
-
         loseSound.Play();
-
         resultText.text = "Time's Up! O wins!";
-
         resultText.gameObject.SetActive(true);
-
-        rematchButton.gameObject.SetActive(true );
-
+        rematchButton.gameObject.SetActive(true);
         tiesCount++;
         TiesCounter.text = tiesCount.ToString();
     }
 
-    //Paramater variable is showing which button in the grid is clicked
-    public void TicTacToePlayableButtons(int whichButton)
+    public void TicTacToePlayableButtons(int x, int y)
     {
         if (timeIsEndingSound.isPlaying)
         {
             timeIsEndingSound.Stop();
         }
 
-        tictactoeSpaces[whichButton].image.sprite = playerIcons[whoseTurn]; // displaying the icon of the player who clicked the button (X for X player, O for O player
-
-        tictactoeSpaces[whichButton].interactable = false; //Making sure that the button can't be clicked more than once. After clicking you can't interact with it.
+        tictactoeSpaces[x * 3 + y].image.sprite = playerIcons[whoseTurn]; // Display the icon of the player who clicked the button
+        tictactoeSpaces[x * 3 + y].interactable = false; // Disable the button after clicking
 
         turnCount++;
-        markedFields[whichButton] = whoseTurn;
+        markedFields[x, y] = whoseTurn;
 
-        RecordPlaterMove(whichButton);
+        RecordPlayerMove(new Vector2Int(x, y));
 
         moveSound.Play();
 
-        if(CheckWin())
+        if (CheckWin())
         {
             EndGame();
         }
-        else if (turnCount >= 9) 
+        else if (turnCount >= 9)
         {
             DrawGame();
         }
@@ -173,46 +155,46 @@ public class GameController : MonoBehaviour
     void ComputerMove()
     {
         int bestScore = int.MinValue;
-        //int move = -1;
-
-        // Alpha and beta should be initialized to int.MinValue and int.MaxValue respectively
         int alpha = int.MinValue;
         int beta = int.MaxValue;
 
-        List<int> bestMoves = new List<int>();
+        List<Vector2Int> bestMoves = new List<Vector2Int>(); // Use Vector2Int to store 2D indices
 
-        for (int i = 0; i < markedFields.Length; i++)
+        for (int i = 0; i < 3; i++)
         {
-            if (markedFields[i] == -1)
+            for (int j = 0; j < 3; j++)
             {
-                markedFields[i] = 1;
-                int score = MiniMax(markedFields, 0, false, alpha, beta);
-                markedFields[i] = -1;
+                if (markedFields[i, j] == -1)
+                {
+                    markedFields[i, j] = 1; // AI move
+                    int score = MiniMax(markedFields, 0, false, alpha, beta);
+                    markedFields[i, j] = -1;
 
-                if (score > bestScore)
-                {
-                    bestScore = score;
-                    //move = i;
-                    bestMoves.Clear();
-                    bestMoves.Add(i); // score the best move
-                }
-                else if (score == bestScore) 
-                {
-                    bestMoves.Add(i);
+                    if (score > bestScore)
+                    {
+                        bestScore = score;
+                        bestMoves.Clear();
+                        bestMoves.Add(new Vector2Int(i, j)); // Add the best move
+                    }
+                    else if (score == bestScore)
+                    {
+                        bestMoves.Add(new Vector2Int(i, j));
+                    }
+
+                    alpha = Mathf.Max(alpha, bestScore);
+                    if (beta <= alpha)
+                        break;
                 }
             }
         }
 
-        //if (move != -1)
-        //{
-        //    TicTacToePlayableButtons(move);
-        //}
-
-        if (bestMoves.Count > 0) 
+        // If there are best moves available
+        if (bestMoves.Count > 0)
         {
-            int move = bestMoves[0];
-            int leastFrequentMove = GetMostFrequentMove();
-            if (bestMoves.Contains(leastFrequentMove)) { 
+            Vector2Int move = bestMoves[0];
+            Vector2Int leastFrequentMove = GetMostFrequentMove();
+            if (bestMoves.Contains(leastFrequentMove))
+            {
                 move = leastFrequentMove;
             }
             else
@@ -220,14 +202,15 @@ public class GameController : MonoBehaviour
                 move = bestMoves[Random.Range(0, bestMoves.Count)];
             }
 
-            TicTacToePlayableButtons(move);
+            // Convert the 2D move to a 1D index
+            int moveIndex = move.x * 3 + move.y;
+            TicTacToePlayableButtons(move.x, move.y);
         }
 
         currentPlayerTime = playerTimeLimit;
     }
 
-    //Added Alpha–beta pruning optimisation
-    int MiniMax(int[] markedFields, int depth, bool isMaximizing, int alpha, int beta)
+    int MiniMax(int[,] markedFields, int depth, bool isMaximizing, int alpha, int beta)
     {
         int result = CheckWinner();
         if (result != 0)
@@ -244,18 +227,21 @@ public class GameController : MonoBehaviour
         {
             int bestScore = int.MinValue;
 
-            for (int i = 0; i < markedFields.Length; i++)
+            for (int i = 0; i < 3; i++)
             {
-                if (markedFields[i] == -1)
+                for (int j = 0; j < 3; j++)
                 {
-                    markedFields[i] = 1; // AI move
-                    int score = MiniMax(markedFields, depth + 1, false, alpha, beta);
-                    markedFields[i] = -1;
-                    bestScore = Mathf.Max(score, bestScore);
-                    alpha = Mathf.Max(alpha, bestScore);
+                    if (markedFields[i, j] == -1)
+                    {
+                        markedFields[i, j] = 1; // AI move
+                        int score = MiniMax(markedFields, depth + 1, false, alpha, beta);
+                        markedFields[i, j] = -1;
+                        bestScore = Mathf.Max(score, bestScore);
+                        alpha = Mathf.Max(alpha, bestScore);
 
-                    if (beta <= alpha)
-                        break;
+                        if (beta <= alpha)
+                            break;
+                    }
                 }
             }
 
@@ -265,18 +251,21 @@ public class GameController : MonoBehaviour
         {
             int bestScore = int.MaxValue;
 
-            for (int i = 0; i < markedFields.Length; i++)
+            for (int i = 0; i < 3; i++)
             {
-                if (markedFields[i] == -1)
+                for (int j = 0; j < 3; j++)
                 {
-                    markedFields[i] = 0; // Player move
-                    int score = MiniMax(markedFields, depth + 1, true, alpha, beta);
-                    markedFields[i] = -1;
-                    bestScore = Mathf.Min(score, bestScore);
-                    beta = Mathf.Min(beta, bestScore);
+                    if (markedFields[i, j] == -1)
+                    {
+                        markedFields[i, j] = 0; // Player move
+                        int score = MiniMax(markedFields, depth + 1, true, alpha, beta);
+                        markedFields[i, j] = -1;
+                        bestScore = Mathf.Min(score, bestScore);
+                        beta = Mathf.Min(beta, bestScore);
 
-                    if (beta <= alpha)
-                        break;
+                        if (beta <= alpha)
+                            break;
+                    }
                 }
             }
 
@@ -284,25 +273,24 @@ public class GameController : MonoBehaviour
         }
     }
 
-
-    void RecordPlaterMove(int move)
+    void RecordPlayerMove(Vector2Int move)
     {
         if (moveFrequency.ContainsKey(move))
         {
             moveFrequency[move]++;
         }
-        else 
+        else
         {
             moveFrequency[move] = 1;
         }
     }
 
-    int GetMostFrequentMove()
+    Vector2Int GetMostFrequentMove()
     {
         return moveFrequency.OrderByDescending(kvp => kvp.Value).FirstOrDefault().Key;
     }
 
-    int AdjustedEvaluateBoard(int[] markedFields)
+    int AdjustedEvaluateBoard(int[,] markedFields)
     {
         int score = 0;
         int ai = 1;
@@ -315,22 +303,36 @@ public class GameController : MonoBehaviour
             score -= 100; // Player win
 
         // Center is valuable
-        if (markedFields[4] == ai) score += 10;
+        if (markedFields[1, 1] == ai) score += 10;
 
         // Corners are valuable
-        int[] corners = { 0, 2, 6, 8 };
-        foreach (int corner in corners)
+        int[][] corners = new int[][]
         {
-            if (markedFields[corner] == ai) score += 5;
-            if (markedFields[corner] == player) score -= 5;
+        new int[] { 0, 0 },
+        new int[] { 0, 2 },
+        new int[] { 2, 0 },
+        new int[] { 2, 2 }
+        };
+
+        foreach (var corner in corners)
+        {
+            if (markedFields[corner[0], corner[1]] == ai) score += 5;
+            if (markedFields[corner[0], corner[1]] == player) score -= 5;
         }
 
         // Sides are less valuable
-        int[] sides = { 1, 3, 5, 7 };
-        foreach (int side in sides)
+        int[][] sides = new int[][]
         {
-            if (markedFields[side] == ai) score += 2;
-            if (markedFields[side] == player) score -= 2;
+        new int[] { 0, 1 },
+        new int[] { 1, 0 },
+        new int[] { 1, 2 },
+        new int[] { 2, 1 }
+        };
+
+        foreach (var side in sides)
+        {
+            if (markedFields[side[0], side[1]] == ai) score += 2;
+            if (markedFields[side[0], side[1]] == player) score -= 2;
         }
 
         // Add additional heuristics if necessary
@@ -342,27 +344,35 @@ public class GameController : MonoBehaviour
     }
 
 
-
-
-    bool CheckPlayerWinningMove(int[] board, int player)
+    bool CheckPlayerWinningMove(int[,] board, int player)
     {
-        int[][] winPatterns = new int[][]
-        {
-            new int[] { 0, 1, 2 }, // Top row
-            new int[] { 3, 4, 5 }, // Middle row
-            new int[] { 6, 7, 8 }, // Bottom row
-            new int[] { 0, 3, 6 }, // Left column
-            new int[] { 1, 4, 7 }, // Center column
-            new int[] { 2, 5, 8 }, // Right column
-            new int[] { 0, 4, 8 }, // Diagonal \
-            new int[] { 2, 4, 6 }  // Diagonal /
+        int[,] winPatterns = new int[,] {
+            { 0, 1, 2 }, // Top row
+            { 3, 4, 5 }, // Middle row
+            { 6, 7, 8 }, // Bottom row
+            { 0, 3, 6 }, // Left column
+            { 1, 4, 7 }, // Center column
+            { 2, 5, 8 }, // Right column
+            { 0, 4, 8 }, // Diagonal \
+            { 2, 4, 6 }  // Diagonal /
         };
 
-        foreach (var pattern in winPatterns)
+        for (int i = 0; i < winPatterns.GetLength(0); i++)
         {
-            if (markedFields[pattern[0]] == player &&
-                markedFields[pattern[1]] == player &&
-                markedFields[pattern[2]] == player)
+            int a = winPatterns[i, 0];
+            int b = winPatterns[i, 1];
+            int c = winPatterns[i, 2];
+
+            int aRow = a / 3;
+            int aCol = a % 3;
+            int bRow = b / 3;
+            int bCol = b % 3;
+            int cRow = c / 3;
+            int cCol = c % 3;
+
+            if (board[aRow, aCol] == player &&
+                board[bRow, bCol] == player &&
+                board[cRow, cCol] == player)
             {
                 return true;
             }
@@ -371,36 +381,38 @@ public class GameController : MonoBehaviour
         return false;
     }
 
-    bool CheckBlockingMove(int[] markedFields, int player)
+    bool CheckBlockingMove(int[,] markedFields, int player)
     {
-        for (int i = 0; i < markedFields.Length; i++)
+        for (int i = 0; i < 3; i++)
         {
-            if (markedFields[i] == -1)
+            for (int j = 0; j < 3; j++)
             {
-                markedFields[i] = player;
-                bool block = CheckPlayerWinningMove(markedFields, player);
-                markedFields[i] = -1;
+                if (markedFields[i, j] == -1)
+                {
+                    markedFields[i, j] = player;
+                    bool block = CheckPlayerWinningMove(markedFields, player);
+                    markedFields[i, j] = -1;
 
-                if (block) return true;
+                    if (block) return true;
+                }
             }
         }
 
         return false;
     }
 
-
     int CheckWinner()
     {
         int[,] winningCombinations = new int[,] {
-            { 0, 1, 2 },
-            { 3, 4, 5 },
-            { 6, 7, 8 },
-            { 0, 3, 6 },
-            { 1, 4, 7 },
-            { 2, 5, 8 },
-            { 0, 4, 8 },
-            { 2, 4, 6 }
-        };
+        { 0, 1, 2 }, // Top row
+        { 3, 4, 5 }, // Middle row
+        { 6, 7, 8 }, // Bottom row
+        { 0, 3, 6 }, // Left column
+        { 1, 4, 7 }, // Center column
+        { 2, 5, 8 }, // Right column
+        { 0, 4, 8 }, // Diagonal \
+        { 2, 4, 6 }  // Diagonal /
+    };
 
         for (int i = 0; i < winningCombinations.GetLength(0); i++)
         {
@@ -408,13 +420,22 @@ public class GameController : MonoBehaviour
             int b = winningCombinations[i, 1];
             int c = winningCombinations[i, 2];
 
-            if (markedFields[a] == markedFields[b] && markedFields[b] == markedFields[c] && markedFields[a] != -1)
+            int aRow = a / 3;
+            int aCol = a % 3;
+            int bRow = b / 3;
+            int bCol = b % 3;
+            int cRow = c / 3;
+            int cCol = c % 3;
+
+            if (markedFields[aRow, aCol] == markedFields[bRow, bCol] &&
+                markedFields[bRow, bCol] == markedFields[cRow, cCol] &&
+                markedFields[aRow, aCol] != -1)
             {
-                if (markedFields[a] == 0) // Player wins
+                if (markedFields[aRow, aCol] == 0) // Player wins
                 {
                     return -10;
                 }
-                else if (markedFields[a] == 1) // AI wins
+                else if (markedFields[aRow, aCol] == 1) // AI wins
                 {
                     return 10;
                 }
@@ -422,11 +443,14 @@ public class GameController : MonoBehaviour
         }
 
         // Check for a draw
-        for (int i = 0; i < markedFields.Length; i++)
+        for (int i = 0; i < 3; i++)
         {
-            if (markedFields[i] == -1)
+            for (int j = 0; j < 3; j++)
             {
-                return 0; // Game not over
+                if (markedFields[i, j] == -1)
+                {
+                    return 0; // Game not over
+                }
             }
         }
 
@@ -447,12 +471,10 @@ public class GameController : MonoBehaviour
             btn.interactable = false;
         }
 
-        if(whoseTurn == 0)
+        if (whoseTurn == 0)
         {
             winSound.Play();
             resultText.text = "X wins!";
-
-            currXWinCount = int.Parse(XWinsCount.text);
             currXWinCount++;
             XWinsCount.text = currXWinCount.ToString();
         }
@@ -460,8 +482,6 @@ public class GameController : MonoBehaviour
         {
             loseSound.Play();
             resultText.text = "O wins!";
-            
-            currOWinsCounter = int.Parse(OWinsCounter.text);
             currOWinsCounter++;
             OWinsCounter.text = currOWinsCounter.ToString();
         }
@@ -469,22 +489,13 @@ public class GameController : MonoBehaviour
         currentPlayerTime = playerTimeLimit;
         isTimerRunning = false;
         rematchButton.gameObject.SetActive(true);
-        //string result = (whoseTurn == 0) ? "X wins!" : "O wins!";
-
-        //resultText.text = result;
         resultText.gameObject.SetActive(true);
-        
-        //Debug.Log(result);
     }
-
 
     void DrawGame()
     {
-        //Debug.Log("It's a draw!");
-        tiesCount = int.Parse(TiesCounter.text);
         tiesCount++;
         TiesCounter.text = tiesCount.ToString();
-
         resultText.text = "It's a draw!";
         resultText.gameObject.SetActive(true);
     }
