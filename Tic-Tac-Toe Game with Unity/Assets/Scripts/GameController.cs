@@ -141,6 +141,8 @@ public class GameController : MonoBehaviour
         turnCount++;
         markedFields[whichButton] = whoseTurn;
 
+        RecordPlaterMove(whichButton);
+
         moveSound.Play();
 
         if(CheckWin())
@@ -208,7 +210,16 @@ public class GameController : MonoBehaviour
 
         if (bestMoves.Count > 0) 
         {
-            int move = bestMoves[Random.Range(0, bestMoves.Count)];
+            int move = bestMoves[0];
+            int leastFrequentMove = GetMostFrequentMove();
+            if (bestMoves.Contains(leastFrequentMove)) { 
+                move = leastFrequentMove;
+            }
+            else
+            {
+                move = bestMoves[Random.Range(0, bestMoves.Count)];
+            }
+
             TicTacToePlayableButtons(move);
         }
 
@@ -218,15 +229,15 @@ public class GameController : MonoBehaviour
     //Added Alpha–beta pruning optimisation
     int MiniMax(int[] markedFields, int depth, bool isMaximizing, int alpha, int beta)
     {
-        if (depth >= 4)
-        {
-            return AdjustedEvaluateBoard(markedFields);
-        }
-
         int result = CheckWinner();
         if (result != 0)
         {
             return result == 1 ? 10 - depth : result == -1 ? depth - 10 : 0;
+        }
+
+        if (depth >= 4)
+        {
+            return AdjustedEvaluateBoard(markedFields);
         }
 
         if (isMaximizing)
@@ -332,19 +343,31 @@ public class GameController : MonoBehaviour
 
 
 
+
     bool CheckPlayerWinningMove(int[] board, int player)
     {
-        for (int i = 0; i < board.Length; i++)
+        int[][] winPatterns = new int[][]
         {
-            if (board[i] == -1)
+            new int[] { 0, 1, 2 }, // Top row
+            new int[] { 3, 4, 5 }, // Middle row
+            new int[] { 6, 7, 8 }, // Bottom row
+            new int[] { 0, 3, 6 }, // Left column
+            new int[] { 1, 4, 7 }, // Center column
+            new int[] { 2, 5, 8 }, // Right column
+            new int[] { 0, 4, 8 }, // Diagonal \
+            new int[] { 2, 4, 6 }  // Diagonal /
+        };
+
+        foreach (var pattern in winPatterns)
+        {
+            if (markedFields[pattern[0]] == player &&
+                markedFields[pattern[1]] == player &&
+                markedFields[pattern[2]] == player)
             {
-                board[i] = player;
-                bool win = CheckWinner() == player;
-                board[i] = -1;
-                if (win)
-                    return true;
+                return true;
             }
         }
+
         return false;
     }
 
