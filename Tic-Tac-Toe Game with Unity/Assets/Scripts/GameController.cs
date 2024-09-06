@@ -218,14 +218,17 @@ public class GameController : MonoBehaviour
     //Added Alpha–beta pruning optimisation
     int MiniMax(int[] markedFields, int depth, bool isMaximizing, int alpha, int beta)
     {
+        if (depth >= 4)
+        {
+            return AdjustedEvaluateBoard(markedFields);
+        }
+
         int result = CheckWinner();
         if (result != 0)
         {
-            //return result;
-            return result == 1 ? 10 : result == -1 ? -10 : 0;
+            return result == 1 ? 10 - depth : result == -1 ? depth - 10 : 0;
         }
 
-        //Checking if Computer is on turn
         if (isMaximizing)
         {
             int bestScore = int.MinValue;
@@ -235,18 +238,13 @@ public class GameController : MonoBehaviour
                 if (markedFields[i] == -1)
                 {
                     markedFields[i] = 1; // AI move
-
-                    //Calling the function but this time is Player move - isMaximazing = false
-                    int score = AdjustedEvaluateBoard(markedFields);
-                    int miniMaxScore = MiniMax(markedFields, depth + 1, false, alpha, beta);
+                    int score = MiniMax(markedFields, depth + 1, false, alpha, beta);
                     markedFields[i] = -1;
                     bestScore = Mathf.Max(score, bestScore);
                     alpha = Mathf.Max(alpha, bestScore);
 
-                    if (alpha >= beta)
-                    {
+                    if (beta <= alpha)
                         break;
-                    }
                 }
             }
 
@@ -260,19 +258,21 @@ public class GameController : MonoBehaviour
             {
                 if (markedFields[i] == -1)
                 {
-                    markedFields[i] = 0; // Player's move
-
-                    //Calling the function but this time is Computer move - is Maximizing = true
-                    int score = AdjustedEvaluateBoard(markedFields);
-                    int miniMaxScore = MiniMax(markedFields, depth + 1, true, alpha, beta);
+                    markedFields[i] = 0; // Player move
+                    int score = MiniMax(markedFields, depth + 1, true, alpha, beta);
                     markedFields[i] = -1;
                     bestScore = Mathf.Min(score, bestScore);
+                    beta = Mathf.Min(beta, bestScore);
+
+                    if (beta <= alpha)
+                        break;
                 }
             }
 
             return bestScore;
         }
     }
+
 
     void RecordPlaterMove(int move)
     {
@@ -294,50 +294,77 @@ public class GameController : MonoBehaviour
     int AdjustedEvaluateBoard(int[] markedFields)
     {
         int score = 0;
-
         int ai = 1;
         int player = 0;
 
+        // Check for potential winning moves for AI
+        if (CheckPlayerWinningMove(markedFields, ai))
+            score += 100; // AI win
+        if (CheckPlayerWinningMove(markedFields, player))
+            score -= 100; // Player win
+
+        // Center is valuable
+        if (markedFields[4] == ai) score += 10;
+
+        // Corners are valuable
+        int[] corners = { 0, 2, 6, 8 };
+        foreach (int corner in corners)
+        {
+            if (markedFields[corner] == ai) score += 5;
+            if (markedFields[corner] == player) score -= 5;
+        }
+
+        // Sides are less valuable
+        int[] sides = { 1, 3, 5, 7 };
+        foreach (int side in sides)
+        {
+            if (markedFields[side] == ai) score += 2;
+            if (markedFields[side] == player) score -= 2;
+        }
+
+        // Add additional heuristics if necessary
+        // Example: Block opponent's potential winning move
+        if (CheckBlockingMove(markedFields, player))
+            score -= 20; // Deduct points for defensive moves
+
+        return score;
+    }
+
+
+
+    bool CheckPlayerWinningMove(int[] board, int player)
+    {
+        for (int i = 0; i < board.Length; i++)
+        {
+            if (board[i] == -1)
+            {
+                board[i] = player;
+                bool win = CheckWinner() == player;
+                board[i] = -1;
+                if (win)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    bool CheckBlockingMove(int[] markedFields, int player)
+    {
         for (int i = 0; i < markedFields.Length; i++)
         {
             if (markedFields[i] == -1)
             {
-                markedFields[i] = ai;
-                if(CheckWinner() == ai)
-                {
-                    score += 100;
-                    markedFields[i] = -1;
-                }
-            }
-        }
-
-        for(int i = 0; i < markedFields.Length; i++)
-        {
-            if(markedFields[i] == -1)
-            {
                 markedFields[i] = player;
-                if(CheckWinner() == player)
-                {
-                    score -= 100;
-                    markedFields[i] = -1;
-                }
+                bool block = CheckPlayerWinningMove(markedFields, player);
+                markedFields[i] = -1;
+
+                if (block) return true;
             }
         }
 
-        // Example evaluation logic
-        if (markedFields[4] == 1) score += 3; // Center
-        if (markedFields[0] == 1 || markedFields[2] == 1 || markedFields[6] == 1 || markedFields[8] == 1) score += 2; // Corners
-        if (markedFields[1] == 1 || markedFields[3] == 1 || markedFields[5] == 1 || markedFields[7] == 1) score += 1; // Sides
-
-        // Example of adjusting score based on player's frequent moves
-        int mostFrequentMove = GetMostFrequentMove();
-        if (markedFields[mostFrequentMove] == -1) // Assuming -1 means the space is available
-        {
-            score -= 2; // Adjust score based on player's strategy
-        }
-
-        return score;
+        return false;
     }
+
 
     int CheckWinner()
     {
