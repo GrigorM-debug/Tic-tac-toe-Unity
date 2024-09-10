@@ -531,6 +531,7 @@ public class GameController : MonoBehaviour
         TiesCounter.text = tiesCount.ToString();
         resultText.text = "It's a draw!";
         resultText.gameObject.SetActive(true);
+        rematchButton.gameObject.SetActive(true);
     }
 
     public void Rematch()
