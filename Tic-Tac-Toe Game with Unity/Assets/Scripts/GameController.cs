@@ -69,6 +69,11 @@ public class GameController : MonoBehaviour
         {
             tictactoeSpaces[i].interactable = true;
             tictactoeSpaces[i].GetComponent<Image>().sprite = null;
+
+            // Assign button click events programmatically
+            int index = i; // Capture index in local variable for lambda
+            tictactoeSpaces[i].onClick.RemoveAllListeners(); // Clear any old listeners
+            tictactoeSpaces[i].onClick.AddListener(() => OnButtonClick(index));
         }
 
         for (int i = 0; i < 3; i++)
