@@ -112,6 +112,12 @@ public class GameController : MonoBehaviour
         OWinsCounter.text = currOWinsCounter.ToString();
     }
 
+    public void OnButtonClick(int index)
+    {
+        int x = index / 3;
+        int y = index % 3;
+        TicTacToePlayableButtons(x, y);
+    }
 
     public void TicTacToePlayableButtons(int x, int y)
     {
