@@ -175,6 +175,27 @@ public class GameController : MonoBehaviour
 
         List<Vector2Int> bestMoves = new List<Vector2Int>();
 
+        // Block the player if they have a winning move
+        Vector2Int? blockingMove = GetBlockingMove();
+
+        if (blockingMove.HasValue)
+        {
+            TicTacToePlayableButtons(blockingMove.Value.x, blockingMove.Value.y);
+            return;
+        }
+
+        // Consider the most frequent move
+        Vector2Int frequentMove = GetMostFrequentMove();
+        bool frequentMoveIsAvailable = markedFields[frequentMove.x, frequentMove.y] == -1;
+
+        if (frequentMoveIsAvailable)
+        {
+            // Use the frequent move if it's available
+            TicTacToePlayableButtons(frequentMove.x, frequentMove.y);
+            return;
+        }
+
+        // Use MiniMax to find the best move
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
@@ -211,6 +232,27 @@ public class GameController : MonoBehaviour
         currentPlayerTime = playerTimeLimit;
     }
 
+    Vector2Int? GetBlockingMove()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (markedFields[i, j] == -1)
+                {
+                    markedFields[i, j] = 0; // Player move
+                    bool block = CheckPlayerWinningMove(markedFields, 0);
+                    markedFields[i, j] = -1;
+
+                    if (block) return new Vector2Int(i, j);
+                }
+            }
+        }
+
+        return null;
+    }
+
+
     int MiniMax(int[,] markedFields, int depth, bool isMaximizing, int alpha, int beta)
     {
         int result = CheckWinner();
@@ -227,7 +269,7 @@ public class GameController : MonoBehaviour
                     if (markedFields[i, j] == -1)
                     {
                         markedFields[i, j] = 1; // AI move
-                        int score = MiniMax(markedFields, depth + 1, false, alpha, beta);
+                        int score = AdjustedEvaluateBoard(markedFields);
                         markedFields[i, j] = -1;
                         bestScore = Mathf.Max(score, bestScore);
                         alpha = Mathf.Max(alpha, bestScore);
@@ -250,7 +292,7 @@ public class GameController : MonoBehaviour
                     if (markedFields[i, j] == -1)
                     {
                         markedFields[i, j] = 0; // Player move
-                        int score = MiniMax(markedFields, depth + 1, true, alpha, beta);
+                        int score = AdjustedEvaluateBoard(markedFields);
                         markedFields[i, j] = -1;
                         bestScore = Mathf.Min(score, bestScore);
                         beta = Mathf.Min(beta, bestScore);
