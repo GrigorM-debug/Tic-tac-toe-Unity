@@ -41,10 +41,11 @@ public class GameController : MonoBehaviour
     {
         GameInitialize();
 
-        moveSound = GetComponents<AudioSource>()[2];
-        winSound = GetComponents<AudioSource>()[0];
-        loseSound = GetComponents<AudioSource>()[1];
-        timeIsEndingSound = GetComponents<AudioSource>()[4];
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        moveSound = audioSources[2];
+        winSound = audioSources[0];
+        loseSound = audioSources[1];
+        timeIsEndingSound = audioSources[4];
     }
 
     void GameInitialize()
@@ -94,7 +95,7 @@ public class GameController : MonoBehaviour
             else if (currentPlayerTime <= 3 && !hasPlayedEndingSound)
             {
                 timeIsEndingSound.Play();
-                hasPlayedEndingSound = true; // Ensure the sound only plays once when reaching 3 seconds
+                hasPlayedEndingSound = true;
             }
         }
     }
@@ -106,9 +107,11 @@ public class GameController : MonoBehaviour
         resultText.text = "Time's Up! O wins!";
         resultText.gameObject.SetActive(true);
         rematchButton.gameObject.SetActive(true);
-        tiesCount++;
-        TiesCounter.text = tiesCount.ToString();
+
+        currOWinsCounter++;
+        OWinsCounter.text = currOWinsCounter.ToString();
     }
+
 
     public void TicTacToePlayableButtons(int x, int y)
     {
@@ -117,8 +120,9 @@ public class GameController : MonoBehaviour
             timeIsEndingSound.Stop();
         }
 
-        tictactoeSpaces[x * 3 + y].image.sprite = playerIcons[whoseTurn]; // Display the icon of the player who clicked the button
-        tictactoeSpaces[x * 3 + y].interactable = false; // Disable the button after clicking
+        // Update the board and button
+        tictactoeSpaces[x * 3 + y].image.sprite = playerIcons[whoseTurn];
+        tictactoeSpaces[x * 3 + y].interactable = false;
 
         turnCount++;
         markedFields[x, y] = whoseTurn;
@@ -158,7 +162,7 @@ public class GameController : MonoBehaviour
         int alpha = int.MinValue;
         int beta = int.MaxValue;
 
-        List<Vector2Int> bestMoves = new List<Vector2Int>(); // Use Vector2Int to store 2D indices
+        List<Vector2Int> bestMoves = new List<Vector2Int>();
 
         for (int i = 0; i < 3; i++)
         {
@@ -174,7 +178,7 @@ public class GameController : MonoBehaviour
                     {
                         bestScore = score;
                         bestMoves.Clear();
-                        bestMoves.Add(new Vector2Int(i, j)); // Add the best move
+                        bestMoves.Add(new Vector2Int(i, j));
                     }
                     else if (score == bestScore)
                     {
@@ -182,28 +186,14 @@ public class GameController : MonoBehaviour
                     }
 
                     alpha = Mathf.Max(alpha, bestScore);
-                    if (beta <= alpha)
-                        break;
+                    if (beta <= alpha) break;
                 }
             }
         }
 
-        // If there are best moves available
         if (bestMoves.Count > 0)
         {
-            Vector2Int move = bestMoves[0];
-            Vector2Int leastFrequentMove = GetMostFrequentMove();
-            if (bestMoves.Contains(leastFrequentMove))
-            {
-                move = leastFrequentMove;
-            }
-            else
-            {
-                move = bestMoves[Random.Range(0, bestMoves.Count)];
-            }
-
-            // Convert the 2D move to a 1D index
-            int moveIndex = move.x * 3 + move.y;
+            Vector2Int move = bestMoves[Random.Range(0, bestMoves.Count)];
             TicTacToePlayableButtons(move.x, move.y);
         }
 
@@ -213,15 +203,7 @@ public class GameController : MonoBehaviour
     int MiniMax(int[,] markedFields, int depth, bool isMaximizing, int alpha, int beta)
     {
         int result = CheckWinner();
-        if (result != 0)
-        {
-            return result == 1 ? 10 - depth : result == -1 ? depth - 10 : 0;
-        }
-
-        if (depth >= 4)
-        {
-            return AdjustedEvaluateBoard(markedFields);
-        }
+        if (result != 0) return result == 1 ? 10 - depth : result == -1 ? depth - 10 : 0;
 
         if (isMaximizing)
         {
@@ -239,8 +221,7 @@ public class GameController : MonoBehaviour
                         bestScore = Mathf.Max(score, bestScore);
                         alpha = Mathf.Max(alpha, bestScore);
 
-                        if (beta <= alpha)
-                            break;
+                        if (beta <= alpha) break;
                     }
                 }
             }
@@ -263,8 +244,7 @@ public class GameController : MonoBehaviour
                         bestScore = Mathf.Min(score, bestScore);
                         beta = Mathf.Min(beta, bestScore);
 
-                        if (beta <= alpha)
-                            break;
+                        if (beta <= alpha) break;
                     }
                 }
             }
