@@ -429,7 +429,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
     m_PressedColor: {r: 0.53638804, g: 0.5255446, b: 0.5255446, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.5, g: 0.4787736, b: 0.4787736, a: 1}
+    m_DisabledColor: {r: 0.9339623, g: 0.91193485, b: 0.91193485, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -803,7 +803,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
     m_PressedColor: {r: 0.53638804, g: 0.5255446, b: 0.5255446, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.5, g: 0.4787736, b: 0.4787736, a: 1}
+    m_DisabledColor: {r: 0.9339623, g: 0.91193485, b: 0.91193485, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -935,7 +935,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
     m_PressedColor: {r: 0.53638804, g: 0.5255446, b: 0.5255446, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.5, g: 0.4787736, b: 0.4787736, a: 1}
+    m_DisabledColor: {r: 0.9339623, g: 0.91193485, b: 0.91193485, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1200,7 +1200,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
     m_PressedColor: {r: 0.53638804, g: 0.5255446, b: 0.5255446, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.5, g: 0.4787736, b: 0.4787736, a: 1}
+    m_DisabledColor: {r: 0.9339623, g: 0.91193485, b: 0.91193485, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1332,7 +1332,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
     m_PressedColor: {r: 0.53638804, g: 0.5255446, b: 0.5255446, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.5, g: 0.4787736, b: 0.4787736, a: 1}
+    m_DisabledColor: {r: 0.9339623, g: 0.91193485, b: 0.91193485, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -2627,7 +2627,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
     m_PressedColor: {r: 0.53638804, g: 0.5255446, b: 0.5255446, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.5, g: 0.4787736, b: 0.4787736, a: 1}
+    m_DisabledColor: {r: 0.9339623, g: 0.91193485, b: 0.91193485, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3027,7 +3027,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
     m_PressedColor: {r: 0.53638804, g: 0.5255446, b: 0.5255446, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.5, g: 0.4787736, b: 0.4787736, a: 1}
+    m_DisabledColor: {r: 0.9339623, g: 0.91193485, b: 0.91193485, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3342,7 +3342,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
     m_PressedColor: {r: 0.53638804, g: 0.5255446, b: 0.5255446, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.5, g: 0.4787736, b: 0.4787736, a: 1}
+    m_DisabledColor: {r: 0.9339623, g: 0.91193485, b: 0.91193485, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -3941,7 +3941,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
     m_PressedColor: {r: 0.53638804, g: 0.5255446, b: 0.5255446, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.5, g: 0.4787736, b: 0.4787736, a: 1}
+    m_DisabledColor: {r: 0.9339623, g: 0.91193485, b: 0.91193485, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
