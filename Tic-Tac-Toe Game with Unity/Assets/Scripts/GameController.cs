@@ -170,15 +170,6 @@ public class GameController : MonoBehaviour
         hasPlayedEndingSound = false;
     }
 
-    Vector2Int? SelectBestMove(List<Vector2Int> bestMoves)
-    {
-        if(bestMoves.Count == 0)
-        {
-            return null;
-        }
-
-        return Random.Range(0, 100) < 80 ? bestMoves.First() : bestMoves[Random.Range(0, bestMoves.Count)];
-    }
 
     void ComputerMove()
     {
@@ -254,27 +245,28 @@ public class GameController : MonoBehaviour
             }
         }
 
-        //if (bestMoves.Count > 0)
-        //{
-        //    Vector2Int move = bestMoves[Random.Range(0, bestMoves.Count)];
-        //    TicTacToePlayableButtons(move.x, move.y);
-        //}
+        Vector2Int move;
 
-        Vector2Int move = SelectBestMove(bestMoves);
+        if (bestMoves.Count > 0)
+        {
+            move = bestMoves[Random.Range(0, bestMoves.Count)];
+            TicTacToePlayableButtons(move.x, move.y);
+            return;
+        }
 
-        //if (Random.Range(0, 100) < 10)
-        //{
-        //    move = bestMoves[Random.Range(0, bestMoves.Count)];
-        //}
-        //else
-        //{
-        //    move = bestMoves.First();  // Choose the best move
-        //}
+        if (Random.Range(0, 100) < 10)
+        {
+            move = bestMoves[Random.Range(0, bestMoves.Count)];
+        }
+        else
+        {
+            move = bestMoves.First();  // Choose the best move
+        }
 
-        //if(moveFrequency.ContainsKey(move) && moveFrequency[move] > 5)
-        //{
-        //    move = bestMoves.FirstOrDefault(m => !moveFrequency.ContainsKey(m) || moveFrequency[m] < 5);
-        //}
+        if (moveFrequency.ContainsKey(move) && moveFrequency[move] > 5)
+        {
+            move = bestMoves.FirstOrDefault(m => !moveFrequency.ContainsKey(m) || moveFrequency[m] < 5);
+        }
 
 
 
@@ -310,99 +302,78 @@ public class GameController : MonoBehaviour
 
     int AdjustedEvaluateBoard(int[,] markedFields)
     {
-        //int score = 0;
-        //int ai = 1;
-        //int player = 0;
-
-        //// Check for potential winning moves for AI
-        //if (CheckPlayerWinningMove(markedFields, ai))
-        //    score += 100; // AI win
-        //if (CheckPlayerWinningMove(markedFields, player))
-        //    score -= 100; // Player win
-
-        //// Center is valuable
-        //if (markedFields[1, 1] == ai) score += 20;
-
-        //// Corners are valuable
-        //int[][] corners = new int[][]
-        //{
-        //new int[] { 0, 0 },
-        //new int[] { 0, 2 },
-        //new int[] { 2, 0 },
-        //new int[] { 2, 2 }
-        //};
-
-        //foreach (var corner in corners)
-        //{
-        //    //if (markedFields[corner[0], corner[1]] == ai) score += 5;
-        //    //if (markedFields[corner[0], corner[1]] == player) score -= 5;
-
-        //    if (markedFields[corner[0], corner[1]] == ai) score += 30;
-        //    if (markedFields[corner[0], corner[1]] == player) score -= 30;
-        //}
-
-        //// Sides are less valuable
-        //int[][] sides = new int[][]
-        //{
-        //new int[] { 0, 1 },
-        //new int[] { 1, 0 },
-        //new int[] { 1, 2 },
-        //new int[] { 2, 1 }
-        //};
-
-        //foreach (var side in sides)
-        //{
-        //    //if (markedFields[side[0], side[1]] == ai) score += 2;
-        //    //if (markedFields[side[0], side[1]] == player) score -= 2;
-
-        //    if (markedFields[side[0], side[1]] == ai) score += 50;
-        //    if (markedFields[side[0], side[1]] == player) score -= 50;
-        //}
-
-        ////Diagonals
-        //int[][] diagonals = new int[][]
-        //{
-        //    new int[] { 0, 0 }, // Top-left corner for primary diagonal
-        //    new int[] { 1, 1 }, // Center (shared by both diagonals)
-        //    new int[] { 2, 2 }, // Bottom-right corner for primary diagonal
-        //    new int[] { 0, 2 }, // Top-right corner for secondary diagonal
-        //    new int[] { 2, 0 }
-        //};
-
-        //foreach (var diagonal in diagonals)
-        //{
-        //    if (markedFields[diagonal[0], diagonal[1]] == ai) score += 40;
-        //    if (markedFields[diagonal[0], diagonal[1]] == player) score -= 40;
-        //}
-
-        //// Add additional heuristics if necessary
-        //// Example: Block opponent's potential winning move
-        //if (CheckBlockingMove(markedFields, player))
-        //    score -= 100; // Deduct points for defensive moves
-
-        //return score;
-
         int score = 0;
         int ai = 1;
         int player = 0;
 
-        // Evaluate winning moves
-        if (CheckPlayerWinningMove(markedFields, ai)) score += 100;
-        if (CheckPlayerWinningMove(markedFields, player)) score -= 100;
+        // Check for potential winning moves for AI
+        if (CheckPlayerWinningMove(markedFields, ai))
+            score += 100; // AI win
+        if (CheckPlayerWinningMove(markedFields, player))
+            score -= 100; // Player win
 
-        // Center and corners
+        // Center is valuable
         if (markedFields[1, 1] == ai) score += 20;
-        // Add more adaptive scoring based on move frequency or patterns
-        // For instance, increase score for frequently winning moves or recent patterns
-        foreach (var move in moveFrequency)
+
+        // Corners are valuable
+        int[][] corners = new int[][]
         {
-            if (move.Value > 5)
-            {
-                score += 10;
-            }
+        new int[] { 0, 0 },
+        new int[] { 0, 2 },
+        new int[] { 2, 0 },
+        new int[] { 2, 2 }
+        };
+
+        foreach (var corner in corners)
+        {
+            //if (markedFields[corner[0], corner[1]] == ai) score += 5;
+            //if (markedFields[corner[0], corner[1]] == player) score -= 5;
+
+            if (markedFields[corner[0], corner[1]] == ai) score += 30;
+            if (markedFields[corner[0], corner[1]] == player) score -= 30;
         }
 
+        // Sides are less valuable
+        int[][] sides = new int[][]
+        {
+        new int[] { 0, 1 },
+        new int[] { 1, 0 },
+        new int[] { 1, 2 },
+        new int[] { 2, 1 }
+        };
+
+        foreach (var side in sides)
+        {
+            //if (markedFields[side[0], side[1]] == ai) score += 2;
+            //if (markedFields[side[0], side[1]] == player) score -= 2;
+
+            if (markedFields[side[0], side[1]] == ai) score += 50;
+            if (markedFields[side[0], side[1]] == player) score -= 50;
+        }
+
+        //Diagonals
+        int[][] diagonals = new int[][]
+        {
+            new int[] { 0, 0 }, // Top-left corner for primary diagonal
+            new int[] { 1, 1 }, // Center (shared by both diagonals)
+            new int[] { 2, 2 }, // Bottom-right corner for primary diagonal
+            new int[] { 0, 2 }, // Top-right corner for secondary diagonal
+            new int[] { 2, 0 }
+        };
+
+        foreach (var diagonal in diagonals)
+        {
+            if (markedFields[diagonal[0], diagonal[1]] == ai) score += 40;
+            if (markedFields[diagonal[0], diagonal[1]] == player) score -= 40;
+        }
+
+        // Add additional heuristics if necessary
+        // Example: Block opponent's potential winning move
+        if (CheckBlockingMove(markedFields, player))
+            score -= 100; // Deduct points for defensive moves
+
         return score;
+
     }
 
     int MiniMax(int[,] markedFields, int depth, bool isMaximizing, int alpha, int beta)
@@ -513,54 +484,40 @@ public class GameController : MonoBehaviour
 
     bool CheckPlayerWinningMove(int[,] board, int player)
     {
-        //int[,] winPatterns = new int[,] {
-        //    { 0, 1, 2 }, // Top row
-        //    { 3, 4, 5 }, // Middle row
-        //    { 6, 7, 8 }, // Bottom row
-        //    { 0, 3, 6 }, // Left column
-        //    { 1, 4, 7 }, // Center column
-        //    { 2, 5, 8 }, // Right column
-        //    { 0, 4, 8 }, // Diagonal \
-        //    { 2, 4, 6 }  // Diagonal /
-        //};
-
-        int[] winPatterns = { 0, 1, 2, 3, 4, 5, 6, 7 };
-
-        //for (int i = 0; i < winPatterns.GetLength(0); i++)
-        //{
-        //    //int a = winPatterns[i, 0];
-        //    //int b = winPatterns[i, 1];
-        //    //int c = winPatterns[i, 2];
-
-        //    //int aRow = a / 3;
-        //    //int aCol = a % 3;
-        //    //int bRow = b / 3;
-        //    //int bCol = b % 3;
-        //    //int cRow = c / 3;
-        //    //int cCol = c % 3;
-
-        //    //if (board[aRow, aCol] == player &&
-        //    //    board[bRow, bCol] == player &&
-        //    //    board[cRow, cCol] == player)
-        //    //{
-        //    //    return true;
-        //    //}
+        int[,] winPatterns = new int[,] {
+            { 0, 1, 2 }, // Top row
+            { 3, 4, 5 }, // Middle row
+            { 6, 7, 8 }, // Bottom row
+            { 0, 3, 6 }, // Left column
+            { 1, 4, 7 }, // Center column
+            { 2, 5, 8 }, // Right column
+            { 0, 4, 8 }, // Diagonal \
+            { 2, 4, 6 }  // Diagonal /
+        };
 
 
-        //}
-
-        foreach (int pattern in winPatterns)
+        for (int i = 0; i < winPatterns.GetLength(0); i++)
         {
-            int a = pattern / 3;
-            int b = (pattern + 1) / 3;
-            int c = (pattern + 2) / 3;
+            int a = winPatterns[i, 0];
+            int b = winPatterns[i, 1];
+            int c = winPatterns[i, 2];
 
-            if (board[a, b] == player && board[b, c] == player && board[c, a] == player)
+            int aRow = a / 3;
+            int aCol = a % 3;
+            int bRow = b / 3;
+            int bCol = b % 3;
+            int cRow = c / 3;
+            int cCol = c % 3;
+
+            if (board[aRow, aCol] == player &&
+                board[bRow, bCol] == player &&
+                board[cRow, cCol] == player)
             {
                 return true;
             }
-        }
 
+
+        }
         return false;
     }
 
