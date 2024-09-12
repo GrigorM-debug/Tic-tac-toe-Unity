@@ -332,8 +332,8 @@ public class GameController : MonoBehaviour
             //if (markedFields[corner[0], corner[1]] == ai) score += 5;
             //if (markedFields[corner[0], corner[1]] == player) score -= 5;
 
-            if (markedFields[corner[0], corner[1]] == ai) score += 30;
-            if (markedFields[corner[0], corner[1]] == player) score -= 30;
+            if (markedFields[corner[0], corner[1]] == ai) score += 80;
+            if (markedFields[corner[0], corner[1]] == player) score -= 80;
         }
 
         // Sides are less valuable
@@ -350,8 +350,8 @@ public class GameController : MonoBehaviour
             //if (markedFields[side[0], side[1]] == ai) score += 2;
             //if (markedFields[side[0], side[1]] == player) score -= 2;
 
-            if (markedFields[side[0], side[1]] == ai) score += 50;
-            if (markedFields[side[0], side[1]] == player) score -= 50;
+            if (markedFields[side[0], side[1]] == ai) score += 80;
+            if (markedFields[side[0], side[1]] == player) score -= 80;
         }
 
         //Diagonals
@@ -366,8 +366,8 @@ public class GameController : MonoBehaviour
 
         foreach (var diagonal in diagonals)
         {
-            if (markedFields[diagonal[0], diagonal[1]] == ai) score += 40;
-            if (markedFields[diagonal[0], diagonal[1]] == player) score -= 40;
+            if (markedFields[diagonal[0], diagonal[1]] == ai) score += 80;
+            if (markedFields[diagonal[0], diagonal[1]] == player) score -= 80;
         }
 
         // Add additional heuristics if necessary
@@ -390,17 +390,20 @@ public class GameController : MonoBehaviour
 
         int score = AdjustedEvaluateBoard(markedFields);
 
-        if(score == 10)
-        {
-            return 10 - depth;
-        }
+        //if(score == 10)
+        //{
+        //    return 10 - depth;
+        //}
 
-        if (score == -10) 
-        {
-            return -10 + depth;
-        }
+        //if (score == -10) 
+        //{
+        //    return -10 + depth;
+        //}
 
-       
+        if (score == 10 || score == -10)
+        {
+            return score;
+        }
 
         if (isMaximizing)
         {
