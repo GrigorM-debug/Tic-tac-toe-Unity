@@ -23,10 +23,8 @@ You can read more about the algorithms used in the following links:
 - [AI Alpha-Beta Pruning - JavaTpoint](https://www.javatpoint.com/ai-alpha-beta-pruning)
 
 ## 🎥 Demo Video
-<video width="640" height="480" controls>
-  <source src="Demo Video/2024-09-12 22-46-11.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+## 🎥 Demo Video
+Watch the demo video on [YouTube](https://youtu.be/IISnz4yb6ng).
 <!-- Watch the demo video [here](Demo%20Video/2024-09-12%2022-46-11.mp4). -->
 
 🚀 **Installation**
