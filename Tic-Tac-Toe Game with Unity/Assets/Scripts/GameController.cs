@@ -178,6 +178,13 @@ public class GameController : MonoBehaviour
 
         List<Vector2Int> bestMoves = new List<Vector2Int>();
 
+        Vector2Int? patternBlockMove = GetBlockingPatternMove();
+        if (patternBlockMove.HasValue)
+        {
+            TicTacToePlayableButtons(patternBlockMove.Value.x, patternBlockMove.Value.y);
+            return;
+        }
+
         // Block the player if they have a winning move
         Vector2Int? blockingMove = GetBlockingMove();
 
@@ -303,8 +310,8 @@ public class GameController : MonoBehaviour
             //if (markedFields[corner[0], corner[1]] == ai) score += 5;
             //if (markedFields[corner[0], corner[1]] == player) score -= 5;
 
-            if (markedFields[corner[0], corner[1]] == ai) score += 10;
-            if (markedFields[corner[0], corner[1]] == player) score -= 10;
+            if (markedFields[corner[0], corner[1]] == ai) score += 30;
+            if (markedFields[corner[0], corner[1]] == player) score -= 30;
         }
 
         // Sides are less valuable
@@ -328,8 +335,8 @@ public class GameController : MonoBehaviour
 
         foreach(var diagonal in diagonals)
         {
-            if (markedFields[diagonal[0], diagonal[1]] == ai) score += 30;
-            if (markedFields[diagonal[0], diagonal[1]] == player) score -= 30;
+            if (markedFields[diagonal[0], diagonal[1]] == ai) score += 40;
+            if (markedFields[diagonal[0], diagonal[1]] == player) score -= 40;
         }
 
         foreach (var side in sides)
@@ -337,8 +344,8 @@ public class GameController : MonoBehaviour
             //if (markedFields[side[0], side[1]] == ai) score += 2;
             //if (markedFields[side[0], side[1]] == player) score -= 2;
 
-            if (markedFields[side[0], side[1]] == ai) score += 40;
-            if (markedFields[side[0], side[1]] == player) score -= 40;
+            if (markedFields[side[0], side[1]] == ai) score += 50;
+            if (markedFields[side[0], side[1]] == player) score -= 50;
         }
 
         // Add additional heuristics if necessary
@@ -418,6 +425,21 @@ public class GameController : MonoBehaviour
 
             return bestScore;
         }
+    }
+
+    Vector2Int? GetBlockingPatternMove()
+    {
+        foreach (var sequence in playerWinningSequences)
+        {
+            foreach (var move in sequence)
+            {
+                if (markedFields[move.x, move.y] == -1) // Spot is available
+                {
+                    return move; // Block this spot
+                }
+            }
+        }
+        return null;
     }
 
     void RecordPlayerMove(Vector2Int move)
@@ -566,6 +588,8 @@ public class GameController : MonoBehaviour
             resultText.text = "X wins!";
             currXWinCount++;
             XWinsCount.text = currXWinCount.ToString();
+
+            StorePlayerWinningMoves();
         }
         else
         {
@@ -579,6 +603,24 @@ public class GameController : MonoBehaviour
         isTimerRunning = false;
         rematchButton.gameObject.SetActive(true);
         resultText.gameObject.SetActive(true);
+    }
+
+    void StorePlayerWinningMoves()
+    {
+        List<Vector2Int> playerWinningMoves = new List<Vector2Int>();
+
+        for(int i = 0; i < 3; i++) 
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (markedFields[i, j] == 0)
+                {
+                    playerWinningMoves.Add(new Vector2Int(i, j));
+                }
+            }
+        }
+
+        playerWinningSequences.Add(playerWinningMoves);
     }
 
     void DrawGame()
