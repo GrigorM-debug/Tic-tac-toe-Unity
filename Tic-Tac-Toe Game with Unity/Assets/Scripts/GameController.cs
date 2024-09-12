@@ -297,7 +297,10 @@ public class GameController : MonoBehaviour
 
     Vector2Int GetMostFrequentMove()
     {
-        return moveFrequency.OrderByDescending(kvp => kvp.Value).FirstOrDefault().Key;
+        //return moveFrequency.OrderByDescending(kvp => kvp.Value).FirstOrDefault().Key;
+
+        var frequentMoves = moveFrequency.Select(kvp => kvp.Key).ToList();
+        return frequentMoves.FirstOrDefault();
     }
 
     int AdjustedEvaluateBoard(int[,] markedFields)
