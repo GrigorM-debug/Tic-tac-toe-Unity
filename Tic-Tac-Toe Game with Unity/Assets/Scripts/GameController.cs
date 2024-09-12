@@ -300,8 +300,8 @@ public class GameController : MonoBehaviour
             //if (markedFields[corner[0], corner[1]] == ai) score += 5;
             //if (markedFields[corner[0], corner[1]] == player) score -= 5;
 
-            if (markedFields[corner[0], corner[1]] == ai) score += 5;
-            if (markedFields[corner[0], corner[1]] == player) score -= 5;
+            if (markedFields[corner[0], corner[1]] == ai) score += 10;
+            if (markedFields[corner[0], corner[1]] == player) score -= 10;
         }
 
         // Sides are less valuable
@@ -313,13 +313,29 @@ public class GameController : MonoBehaviour
         new int[] { 2, 1 }
         };
 
+        //Diagonals
+        int[][] diagonals = new int[][]
+        {
+            new int[] { 0, 0 }, // Top-left corner for primary diagonal
+            new int[] { 1, 1 }, // Center (shared by both diagonals)
+            new int[] { 2, 2 }, // Bottom-right corner for primary diagonal
+            new int[] { 0, 2 }, // Top-right corner for secondary diagonal
+            new int[] { 2, 0 }
+        };
+
+        foreach(var diagonal in diagonals)
+        {
+            if (markedFields[diagonal[0], diagonal[1]] == ai) score += 30;
+            if (markedFields[diagonal[0], diagonal[1]] == player) score -= 30;
+        }
+
         foreach (var side in sides)
         {
             //if (markedFields[side[0], side[1]] == ai) score += 2;
             //if (markedFields[side[0], side[1]] == player) score -= 2;
 
-            if (markedFields[side[0], side[1]] == ai) score += 10;
-            if (markedFields[side[0], side[1]] == player) score -= 10;
+            if (markedFields[side[0], side[1]] == ai) score += 40;
+            if (markedFields[side[0], side[1]] == player) score -= 40;
         }
 
         // Add additional heuristics if necessary
