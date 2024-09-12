@@ -217,6 +217,15 @@ public class GameController : MonoBehaviour
                     int score = MiniMax(markedFields, depth, false, alpha, beta);
                     markedFields[i, j] = -1;
 
+                    foreach (var m in moveFrequency)
+                    {
+                        if (moveFrequency[m.Key] > 3)
+                        {
+                            score -= 10;
+                        }
+                    }
+
+
                     if (score > bestScore)
                     {
                         bestScore = score;
@@ -249,6 +258,11 @@ public class GameController : MonoBehaviour
         else
         {
             move = bestMoves.First();  // Choose the best move
+        }
+
+        if(moveFrequency.ContainsKey(move) && moveFrequency[move] > 5)
+        {
+            move = bestMoves.FirstOrDefault(m => !moveFrequency.ContainsKey(m) || moveFrequency[m] < 5);
         }
 
         TicTacToePlayableButtons(move.x, move.y);
@@ -642,6 +656,9 @@ public class GameController : MonoBehaviour
         {
             loseSound.Stop();
         }
+
+        moveFrequency.Clear();
+        playerWinningSequences.Clear();
 
         GameInitialize();
     }
