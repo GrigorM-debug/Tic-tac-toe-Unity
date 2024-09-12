@@ -203,7 +203,8 @@ public class GameController : MonoBehaviour
                 if (markedFields[i, j] == -1)
                 {
                     markedFields[i, j] = 1; // AI move
-                    int score = MiniMax(markedFields, 8, false, alpha, beta);
+                    int depth = (currOWinsCounter - currXWinCount) > 3 ? 10 : 8;
+                    int score = MiniMax(markedFields, depth, false, alpha, beta);
                     markedFields[i, j] = -1;
 
                     if (score > bestScore)
