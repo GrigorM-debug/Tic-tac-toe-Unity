@@ -336,7 +336,7 @@ public class GameController : MonoBehaviour
             score -= 100; // Player win
 
         // Center is valuable
-        if (markedFields[1, 1] == ai) score += 10;
+        if (markedFields[1, 1] == ai) score += 20;
 
         // Corners are valuable
         int[][] corners = new int[][]
@@ -349,6 +349,9 @@ public class GameController : MonoBehaviour
 
         foreach (var corner in corners)
         {
+            //if (markedFields[corner[0], corner[1]] == ai) score += 5;
+            //if (markedFields[corner[0], corner[1]] == player) score -= 5;
+
             if (markedFields[corner[0], corner[1]] == ai) score += 5;
             if (markedFields[corner[0], corner[1]] == player) score -= 5;
         }
@@ -364,8 +367,11 @@ public class GameController : MonoBehaviour
 
         foreach (var side in sides)
         {
-            if (markedFields[side[0], side[1]] == ai) score += 2;
-            if (markedFields[side[0], side[1]] == player) score -= 2;
+            //if (markedFields[side[0], side[1]] == ai) score += 2;
+            //if (markedFields[side[0], side[1]] == player) score -= 2;
+
+            if (markedFields[side[0], side[1]] == ai) score += 10;
+            if (markedFields[side[0], side[1]] == player) score -= 10;
         }
 
         // Add additional heuristics if necessary
