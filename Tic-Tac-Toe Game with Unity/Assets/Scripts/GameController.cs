@@ -332,8 +332,8 @@ public class GameController : MonoBehaviour
             //if (markedFields[corner[0], corner[1]] == ai) score += 5;
             //if (markedFields[corner[0], corner[1]] == player) score -= 5;
 
-            if (markedFields[corner[0], corner[1]] == ai) score += 80;
-            if (markedFields[corner[0], corner[1]] == player) score -= 80;
+            if (markedFields[corner[0], corner[1]] == ai) score += 50;
+            if (markedFields[corner[0], corner[1]] == player) score -= 50;
         }
 
         // Sides are less valuable
@@ -347,8 +347,8 @@ public class GameController : MonoBehaviour
 
         foreach (var side in sides)
         {
-            if (markedFields[side[0], side[1]] == ai) score += 20;
-            if (markedFields[side[0], side[1]] == player) score -= 20;
+            if (markedFields[side[0], side[1]] == ai) score += 30;
+            if (markedFields[side[0], side[1]] == player) score -= 30;
 
             //if (markedFields[side[0], side[1]] == ai) score += 80;
             //if (markedFields[side[0], side[1]] == player) score -= 80;
