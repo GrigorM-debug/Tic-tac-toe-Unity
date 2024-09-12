@@ -252,72 +252,6 @@ public class GameController : MonoBehaviour
         return null;
     }
 
-
-    int MiniMax(int[,] markedFields, int depth, bool isMaximizing, int alpha, int beta)
-    {
-        int result = CheckWinner();
-        if (result != 0) return result == 1 ? 10 - depth : result == -1 ? depth - 10 : 0;
-
-        if (isMaximizing)
-        {
-            int bestScore = int.MinValue;
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if (markedFields[i, j] == -1)
-                    {
-                        markedFields[i, j] = 1; // AI move
-                        int score = AdjustedEvaluateBoard(markedFields);
-                        markedFields[i, j] = -1;
-                        bestScore = Mathf.Max(score, bestScore);
-                        alpha = Mathf.Max(alpha, bestScore);
-
-                        if (beta <= alpha) break;
-                    }
-                }
-            }
-
-            return bestScore;
-        }
-        else
-        {
-            int bestScore = int.MaxValue;
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if (markedFields[i, j] == -1)
-                    {
-                        markedFields[i, j] = 0; // Player move
-                        int score = AdjustedEvaluateBoard(markedFields);
-                        markedFields[i, j] = -1;
-                        bestScore = Mathf.Min(score, bestScore);
-                        beta = Mathf.Min(beta, bestScore);
-
-                        if (beta <= alpha) break;
-                    }
-                }
-            }
-
-            return bestScore;
-        }
-    }
-
-    void RecordPlayerMove(Vector2Int move)
-    {
-        if (moveFrequency.ContainsKey(move))
-        {
-            moveFrequency[move]++;
-        }
-        else
-        {
-            moveFrequency[move] = 1;
-        }
-    }
-
     Vector2Int GetMostFrequentMove()
     {
         return moveFrequency.OrderByDescending(kvp => kvp.Value).FirstOrDefault().Key;
@@ -380,6 +314,86 @@ public class GameController : MonoBehaviour
             score -= 20; // Deduct points for defensive moves
 
         return score;
+    }
+
+    int MiniMax(int[,] markedFields, int depth, bool isMaximizing, int alpha, int beta)
+    {
+        int score = AdjustedEvaluateBoard(markedFields);
+
+        if(score == 10)
+        {
+            return 10 - depth;
+        }
+
+        if (score == -10) 
+        {
+            return -10 + depth;
+        }
+
+       
+
+        if (isMaximizing)
+        {
+            int bestScore = int.MinValue;
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (markedFields[i, j] == -1)
+                    {
+                        markedFields[i, j] = 1; // AI move
+                        int max = MiniMax(markedFields, depth + 1, !isMaximizing, alpha, beta);
+
+                        if(max > bestScore) bestScore = max;
+
+                        if(bestScore > alpha) alpha = bestScore;
+
+                        markedFields[i, j] = -1;
+                        if (beta <= alpha) break;
+                    }
+                }
+            }
+
+            return bestScore;
+        }
+        else
+        {
+            int bestScore = int.MaxValue;
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (markedFields[i, j] == -1)
+                    {
+                        markedFields[i, j] = 0; // Player move
+                        int min = MiniMax(markedFields, depth + 1, isMaximizing, alpha, bestScore);
+
+                        if(min <= bestScore) bestScore = min;
+
+                        if(bestScore < beta) beta = bestScore;
+
+                        markedFields[i, j] = -1;
+                        if (beta <= alpha) break;
+                    }
+                }
+            }
+
+            return bestScore;
+        }
+    }
+
+    void RecordPlayerMove(Vector2Int move)
+    {
+        if (moveFrequency.ContainsKey(move))
+        {
+            moveFrequency[move]++;
+        }
+        else
+        {
+            moveFrequency[move] = 1;
+        }
     }
 
 
