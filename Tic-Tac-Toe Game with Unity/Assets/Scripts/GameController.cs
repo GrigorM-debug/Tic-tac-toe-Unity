@@ -203,7 +203,7 @@ public class GameController : MonoBehaviour
                 if (markedFields[i, j] == -1)
                 {
                     markedFields[i, j] = 1; // AI move
-                    int score = MiniMax(markedFields, 0, false, alpha, beta);
+                    int score = MiniMax(markedFields, 8, false, alpha, beta);
                     markedFields[i, j] = -1;
 
                     if (score > bestScore)
@@ -223,11 +223,24 @@ public class GameController : MonoBehaviour
             }
         }
 
-        if (bestMoves.Count > 0)
+        //if (bestMoves.Count > 0)
+        //{
+        //    Vector2Int move = bestMoves[Random.Range(0, bestMoves.Count)];
+        //    TicTacToePlayableButtons(move.x, move.y);
+        //}
+
+        Vector2Int move;
+
+        if (Random.Range(0, 100) < 10)
         {
-            Vector2Int move = bestMoves[Random.Range(0, bestMoves.Count)];
-            TicTacToePlayableButtons(move.x, move.y);
+            move = bestMoves[Random.Range(0, bestMoves.Count)];
         }
+        else
+        {
+            move = bestMoves.First();  // Choose the best move
+        }
+
+        TicTacToePlayableButtons(move.x, move.y);
 
         currentPlayerTime = playerTimeLimit;
     }
@@ -345,7 +358,10 @@ public class GameController : MonoBehaviour
                         markedFields[i, j] = 1; // AI move
                         int max = MiniMax(markedFields, depth + 1, !isMaximizing, alpha, beta);
 
-                        if(max > bestScore) bestScore = max;
+                        if(max > bestScore) { 
+                            bestScore = max;
+                     
+                        }
 
                         if(bestScore > alpha) alpha = bestScore;
 
