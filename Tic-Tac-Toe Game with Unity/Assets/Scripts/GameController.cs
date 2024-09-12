@@ -170,6 +170,16 @@ public class GameController : MonoBehaviour
         hasPlayedEndingSound = false;
     }
 
+    Vector2Int? SelectBestMove(List<Vector2Int> bestMoves)
+    {
+        if(bestMoves.Count == 0)
+        {
+            return null;
+        }
+
+        return Random.Range(0, 100) < 80 ? bestMoves.First() : bestMoves[Random.Range(0, bestMoves.Count)];
+    }
+
     void ComputerMove()
     {
         int bestScore = int.MinValue;
@@ -250,21 +260,23 @@ public class GameController : MonoBehaviour
         //    TicTacToePlayableButtons(move.x, move.y);
         //}
 
-        Vector2Int move;
+        Vector2Int move = SelectBestMove(bestMoves);
 
-        if (Random.Range(0, 100) < 10)
-        {
-            move = bestMoves[Random.Range(0, bestMoves.Count)];
-        }
-        else
-        {
-            move = bestMoves.First();  // Choose the best move
-        }
+        //if (Random.Range(0, 100) < 10)
+        //{
+        //    move = bestMoves[Random.Range(0, bestMoves.Count)];
+        //}
+        //else
+        //{
+        //    move = bestMoves.First();  // Choose the best move
+        //}
 
-        if(moveFrequency.ContainsKey(move) && moveFrequency[move] > 5)
-        {
-            move = bestMoves.FirstOrDefault(m => !moveFrequency.ContainsKey(m) || moveFrequency[m] < 5);
-        }
+        //if(moveFrequency.ContainsKey(move) && moveFrequency[move] > 5)
+        //{
+        //    move = bestMoves.FirstOrDefault(m => !moveFrequency.ContainsKey(m) || moveFrequency[m] < 5);
+        //}
+
+
 
         TicTacToePlayableButtons(move.x, move.y);
 
