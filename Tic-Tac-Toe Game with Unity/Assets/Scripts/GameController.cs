@@ -323,6 +323,15 @@ public class GameController : MonoBehaviour
         new int[] { 2, 1 }
         };
 
+        foreach (var side in sides)
+        {
+            //if (markedFields[side[0], side[1]] == ai) score += 2;
+            //if (markedFields[side[0], side[1]] == player) score -= 2;
+
+            if (markedFields[side[0], side[1]] == ai) score += 50;
+            if (markedFields[side[0], side[1]] == player) score -= 50;
+        }
+
         //Diagonals
         int[][] diagonals = new int[][]
         {
@@ -333,25 +342,16 @@ public class GameController : MonoBehaviour
             new int[] { 2, 0 }
         };
 
-        foreach(var diagonal in diagonals)
+        foreach (var diagonal in diagonals)
         {
             if (markedFields[diagonal[0], diagonal[1]] == ai) score += 40;
             if (markedFields[diagonal[0], diagonal[1]] == player) score -= 40;
         }
 
-        foreach (var side in sides)
-        {
-            //if (markedFields[side[0], side[1]] == ai) score += 2;
-            //if (markedFields[side[0], side[1]] == player) score -= 2;
-
-            if (markedFields[side[0], side[1]] == ai) score += 50;
-            if (markedFields[side[0], side[1]] == player) score -= 50;
-        }
-
         // Add additional heuristics if necessary
         // Example: Block opponent's potential winning move
         if (CheckBlockingMove(markedFields, player))
-            score -= 20; // Deduct points for defensive moves
+            score -= 100; // Deduct points for defensive moves
 
         return score;
     }
