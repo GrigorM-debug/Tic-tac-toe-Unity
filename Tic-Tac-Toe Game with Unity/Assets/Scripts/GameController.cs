@@ -526,26 +526,31 @@ public class GameController : MonoBehaviour
 
         int[] winPatterns = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
-        for (int i = 0; i < winPatterns.GetLength(0); i++)
+        //for (int i = 0; i < winPatterns.GetLength(0); i++)
+        //{
+        //    //int a = winPatterns[i, 0];
+        //    //int b = winPatterns[i, 1];
+        //    //int c = winPatterns[i, 2];
+
+        //    //int aRow = a / 3;
+        //    //int aCol = a % 3;
+        //    //int bRow = b / 3;
+        //    //int bCol = b % 3;
+        //    //int cRow = c / 3;
+        //    //int cCol = c % 3;
+
+        //    //if (board[aRow, aCol] == player &&
+        //    //    board[bRow, bCol] == player &&
+        //    //    board[cRow, cCol] == player)
+        //    //{
+        //    //    return true;
+        //    //}
+
+
+        //}
+
+        foreach (int pattern in winPatterns)
         {
-            //int a = winPatterns[i, 0];
-            //int b = winPatterns[i, 1];
-            //int c = winPatterns[i, 2];
-
-            //int aRow = a / 3;
-            //int aCol = a % 3;
-            //int bRow = b / 3;
-            //int bCol = b % 3;
-            //int cRow = c / 3;
-            //int cCol = c % 3;
-
-            //if (board[aRow, aCol] == player &&
-            //    board[bRow, bCol] == player &&
-            //    board[cRow, cCol] == player)
-            //{
-            //    return true;
-            //}
-
             int a = pattern / 3;
             int b = (pattern + 1) / 3;
             int c = (pattern + 2) / 3;
