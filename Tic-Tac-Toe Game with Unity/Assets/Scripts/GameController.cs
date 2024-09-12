@@ -213,7 +213,8 @@ public class GameController : MonoBehaviour
                 if (markedFields[i, j] == -1)
                 {
                     markedFields[i, j] = 1; // AI move
-                    int depth = (currOWinsCounter - currXWinCount) > 3 ? 10 : 8;
+                    //int depth = (currOWinsCounter - currXWinCount) > 3 ? 10 : 8;
+                    int depth = 10 - (turnCount / 2);
                     int score = MiniMax(markedFields, depth, false, alpha, beta);
                     markedFields[i, j] = -1;
 
@@ -372,6 +373,13 @@ public class GameController : MonoBehaviour
 
     int MiniMax(int[,] markedFields, int depth, bool isMaximizing, int alpha, int beta)
     {
+
+        int result = CheckWinner();
+        if (result != 0)
+        {
+            return result == 10 ? 10 - depth : -10 + depth;
+        }
+
         int score = AdjustedEvaluateBoard(markedFields);
 
         if(score == 10)
@@ -471,33 +479,44 @@ public class GameController : MonoBehaviour
 
     bool CheckPlayerWinningMove(int[,] board, int player)
     {
-        int[,] winPatterns = new int[,] {
-            { 0, 1, 2 }, // Top row
-            { 3, 4, 5 }, // Middle row
-            { 6, 7, 8 }, // Bottom row
-            { 0, 3, 6 }, // Left column
-            { 1, 4, 7 }, // Center column
-            { 2, 5, 8 }, // Right column
-            { 0, 4, 8 }, // Diagonal \
-            { 2, 4, 6 }  // Diagonal /
-        };
+        //int[,] winPatterns = new int[,] {
+        //    { 0, 1, 2 }, // Top row
+        //    { 3, 4, 5 }, // Middle row
+        //    { 6, 7, 8 }, // Bottom row
+        //    { 0, 3, 6 }, // Left column
+        //    { 1, 4, 7 }, // Center column
+        //    { 2, 5, 8 }, // Right column
+        //    { 0, 4, 8 }, // Diagonal \
+        //    { 2, 4, 6 }  // Diagonal /
+        //};
+
+        int[] winPatterns = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
         for (int i = 0; i < winPatterns.GetLength(0); i++)
         {
-            int a = winPatterns[i, 0];
-            int b = winPatterns[i, 1];
-            int c = winPatterns[i, 2];
+            //int a = winPatterns[i, 0];
+            //int b = winPatterns[i, 1];
+            //int c = winPatterns[i, 2];
 
-            int aRow = a / 3;
-            int aCol = a % 3;
-            int bRow = b / 3;
-            int bCol = b % 3;
-            int cRow = c / 3;
-            int cCol = c % 3;
+            //int aRow = a / 3;
+            //int aCol = a % 3;
+            //int bRow = b / 3;
+            //int bCol = b % 3;
+            //int cRow = c / 3;
+            //int cCol = c % 3;
 
-            if (board[aRow, aCol] == player &&
-                board[bRow, bCol] == player &&
-                board[cRow, cCol] == player)
+            //if (board[aRow, aCol] == player &&
+            //    board[bRow, bCol] == player &&
+            //    board[cRow, cCol] == player)
+            //{
+            //    return true;
+            //}
+
+            int a = pattern / 3;
+            int b = (pattern + 1) / 3;
+            int c = (pattern + 2) / 3;
+
+            if (board[a, b] == player && board[b, c] == player && board[c, a] == player)
             {
                 return true;
             }
