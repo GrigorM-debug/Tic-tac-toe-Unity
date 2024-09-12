@@ -316,7 +316,7 @@ public class GameController : MonoBehaviour
             score -= 100; // Player win
 
         // Center is valuable
-        if (markedFields[1, 1] == ai) score += 20;
+        if (markedFields[1, 1] == ai) score += 80;
 
         // Corners are valuable
         int[][] corners = new int[][]
