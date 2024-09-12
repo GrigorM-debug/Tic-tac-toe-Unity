@@ -15,16 +15,16 @@
 ---------------
 This repository contains a Unity-based Tic-Tac-Toe game where the player competes against a computer AI. The AI utilizes advanced algorithms including Minimax with Alpha-Beta Pruning for optimized decision-making. The game features a timer, score tracking, and sound effects.
 
-You can read more about about algorithms used in the folowing links: 
-    - https://locall.host/is-minimax-algorithm-hard/
-    - https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-1-introduction/
-    - https://cs.stanford.edu/people/eroberts/courses/soco/projects/2003-04/intelligent-search/alphabeta.html
-    - https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
-    - https://www.javatpoint.com/ai-alpha-beta-pruning
+You can read more about the algorithms used in the following links: 
+- [Is Minimax Algorithm Hard?](https://locall.host/is-minimax-algorithm-hard/)
+- [Minimax Algorithm in Game Theory - GeeksforGeeks](https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-1-introduction/)
+- [Alpha-Beta Pruning - Stanford](https://cs.stanford.edu/people/eroberts/courses/soco/projects/2003-04/intelligent-search/alphabeta.html)
+- [Alpha-Beta Pruning - Wikipedia](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
+- [AI Alpha-Beta Pruning - JavaTpoint](https://www.javatpoint.com/ai-alpha-beta-pruning)
 
 ## 🎥 Demo Video
 <video width="640" height="480" controls>
-  <source src="/Tic-Tac-Toe Game with Unity - Build v2/Demo Video/2024-09-12 22-46-11.mp4" type="video/mp4">
+  <source src="Demo Video/2024-09-12 22-46-11.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
