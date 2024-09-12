@@ -347,11 +347,11 @@ public class GameController : MonoBehaviour
 
         foreach (var side in sides)
         {
-            //if (markedFields[side[0], side[1]] == ai) score += 2;
-            //if (markedFields[side[0], side[1]] == player) score -= 2;
+            if (markedFields[side[0], side[1]] == ai) score += 20;
+            if (markedFields[side[0], side[1]] == player) score -= 20;
 
-            if (markedFields[side[0], side[1]] == ai) score += 80;
-            if (markedFields[side[0], side[1]] == player) score -= 80;
+            //if (markedFields[side[0], side[1]] == ai) score += 80;
+            //if (markedFields[side[0], side[1]] == player) score -= 80;
         }
 
         //Diagonals
@@ -366,8 +366,11 @@ public class GameController : MonoBehaviour
 
         foreach (var diagonal in diagonals)
         {
-            if (markedFields[diagonal[0], diagonal[1]] == ai) score += 80;
-            if (markedFields[diagonal[0], diagonal[1]] == player) score -= 80;
+            //if (markedFields[diagonal[0], diagonal[1]] == ai) score += 80;
+            //if (markedFields[diagonal[0], diagonal[1]] == player) score -= 80;
+
+            if (markedFields[diagonal[0], diagonal[1]] == ai) score += 40;
+            if (markedFields[diagonal[0], diagonal[1]] == player) score -= 40;
         }
 
         // Add additional heuristics if necessary
