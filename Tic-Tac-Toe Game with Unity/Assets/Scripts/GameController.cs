@@ -37,6 +37,9 @@ public class GameController : MonoBehaviour
 
     Dictionary<Vector2Int, int> moveFrequency = new Dictionary<Vector2Int, int>();
 
+    List<List<Vector2Int>> playerWinningSequences = new List<List<Vector2Int>>();
+
+
     void Start()
     {
         GameInitialize();
