@@ -30,7 +30,7 @@ Watch the demo video on [YouTube](https://youtu.be/IISnz4yb6ng).
 
 🚀 **Installation**
 -------------------
-- Download the files from the release depending on you operating system. Extract the file with WinRar, 7Zip, WinZip or some .rar files.
+- Download the files from the release depending on you operating system. Extract the file with WinRar, 7Zip, WinZip or some program for extracting .rar files.
 - Open the folder and run the starting file
 
 🛠️ **Features**
